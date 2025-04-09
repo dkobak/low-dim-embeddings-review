@@ -1,1 +1,1 @@
-# low-dim-embeddings-review
+# Low-dimensional embeddings of high-dimensional data
