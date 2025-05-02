@@ -66,27 +66,31 @@ def preserved_variance_PCs(X, nPCs=50):
     print('- Sum explained variance ratios first 2 PCs: {v}'.format(v=plot_fcts.rstr(pca_model.explained_variance_ratio_[:2].sum(), d=4)))
     print('===')
 
-def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, compute_dist_LD_qa, seed, res_path_emb, res_path_qa, dim_LDS=2, perp_tsne=None, nn_umap=None, nn_phate=None, nn_LE=None, nn_hd=None, dm_hd=None):
+def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, compute_dist_LD_qa, seed, res_path_emb, res_path_qa, dim_LDS=2, perp_tsne=None, nn_umap=None, nn_phate=None, nn_LE=None, nn_hd=None, dm_hd=None, skip_qa=False):
     """
-    Apply an embedding method on a data set and evaluates its quality. 
+    Apply an embedding method on a data set and optionally evaluates its quality. 
     In:
     - X_hd: a 2-D np.ndarray with shape (N,M) containing one example per row and one feature per column. It stores the data set to be embedded. 
     - meth_name: embedding method name. 
     - meth_name4path: embedding method name to use in paths. It also defines the embedding method that is employed. It is assumed to be equal either to 'pca', 'mds', 'mds_sklearn' or to begin with 'tsne', 'umap', 'phate' or 'LE', otherwise an error is raised, indicating that the method to employ is unknown. 
     - pca_preproc: boolean. Set to True if X_hd consists in principale components; in this case, it is assumed that X_hd[:,0] contains the first PC, X_hd[:,1] contains the second one, etc. 
-    - compute_dist_HD: a function such as eucl_dist_matr in this file, enabling to compute pairwise distances in X_hd. Only used if dm_hd is None. 
-    - compute_dist_LD_qa: similar to compute_dist_HD, but to compute pairwise distances in the embedding. These distances are only used for the quality assessment of the embedding, not for its computation. 
+    - compute_dist_HD: a function such as eucl_dist_matr in this file, enabling to compute pairwise distances in X_hd. Only used if dm_hd is None and skip_qa is False; can be None otherwise. 
+    - compute_dist_LD_qa: similar to compute_dist_HD, but to compute pairwise distances in the embedding. These distances are only used for the quality assessment of the embedding, not for its computation. Only used if skip_qa is False; can be None otherwise. 
     - seed: random seed. 
     - res_path_emb: the embedding will be saved in '{rp}{npath}.npy'.format(rp=res_path_emb, npath=meth_name4path).
-    - res_path_qa: path where to save the quality scores. 
+    - res_path_qa: path where to save the quality scores. Only used if skip_qa is False; can be None otherwise. 
     - dim_LDS: dimension of the embedding. 
     - perp_tsne: t-SNE perplexity. 
     - nn_umap: number of neighbors in UMAP.
     - nn_phate: number of neighbors in PHATE. 
     - nn_LE: number of neighbors in Laplacian Eigenmaps. 
-    - nn_hd: same as in dr_quality.eval_knn_recall. If several embeddings of the same data set are computed, this parameter enables avoiding to compute the HD neighbors several times. 
-    - dm_hd: a 2-D np.ndarray with shape (N,N) containing the pairwise distances in X_hd. If None, it is computed using compute_dist_HD. 
+    - nn_hd: same as in dr_quality.eval_knn_recall. If several embeddings of the same data set are computed, this parameter enables avoiding to compute the HD neighbors several times. Only used if skip_qa is False; can be None otherwise. 
+    - dm_hd: a 2-D np.ndarray with shape (N,N) containing the pairwise distances in X_hd. If None, it is computed using compute_dist_HD. Only used if skip_qa is False; can be None otherwise. 
+    - skip_qa: boolean. If True, quality scores of the computed embedding are not evaluated. 
     Out: 
+    If skip_qa is True:
+    - X_ld: a 2-D np.ndarray with shape (N, dim_LDS) containing one example per row and one feature per column. It stores embedding of X_hd. 
+    If skip_qa is False:
     - X_ld: a 2-D np.ndarray with shape (N, dim_LDS) containing one example per row and one feature per column. It stores embedding of X_hd. 
     - nn_hd: same as in dr_quality.eval_knn_recall. It cannot be None at the output. 
     - dm_hd: same as at the input, but it cannot be None at the output. Returning dm_hd avoids computing it several times if multiple embeddings of the same data set are computed. 
@@ -140,84 +144,88 @@ def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, co
         
         np.save(path_emb, X_ld)
     
-    if not (os.path.exists(path_auc) and os.path.exists(path_sigmad) and os.path.exists(path_pearsonr)): 
-        if dm_hd is None:
-            print('- Computing HD distances')
+    if skip_qa:
+        return X_ld
+    else:
+        
+        if not (os.path.exists(path_auc) and os.path.exists(path_sigmad) and os.path.exists(path_pearsonr)): 
+            if dm_hd is None:
+                print('- Computing HD distances')
+                t0 = time.time()
+                dm_hd = compute_dist_HD(X_hd)
+                tf = time.time() - t0
+                print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
+            
+            print('- Computing LD distances in {n} {dim_LDS}-D embedding'.format(n=meth_name, dim_LDS=dim_LDS))
             t0 = time.time()
-            dm_hd = compute_dist_HD(X_hd)
+            dld = compute_dist_LD_qa(X_ld)
             tf = time.time() - t0
             print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
         
-        print('- Computing LD distances in {n} {dim_LDS}-D embedding'.format(n=meth_name, dim_LDS=dim_LDS))
-        t0 = time.time()
-        dld = compute_dist_LD_qa(X_ld)
-        tf = time.time() - t0
-        print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
-    
-    if os.path.exists(path_auc):
-        auc = np.load(path_auc)
-    else:
-        print('- Evaluating the {a} of the LD embedding obtained by {n}'.format(n=meth_name, a=paths.auc_name))
-        t0 = time.time()
-        rnx, auc = dr_quality.eval_dr_quality(d_hd=dm_hd, d_ld=dld)
-        tf = time.time() - t0
-        print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
-        
-        np.save(path_auc, auc)
-    
-    if os.path.exists(path_sigmad):
-        sigma_d = np.load(path_sigmad)
-    else:
-        print('- Evaluating the {s} of the LD embedding obtained by {n}'.format(n=meth_name, s=paths.sigma_d_name))
-        t0 = time.time()
-        sigma_d = dr_quality.eval_sigma_distortion(d_hd=dr_quality.make_dist_vector(dm_hd), d_ld=dr_quality.make_dist_vector(dld))
-        tf = time.time() - t0
-        print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
-        
-        np.save(path_sigmad, sigma_d)
-    
-    if os.path.exists(path_pearsonr):
-        pr = np.load(path_pearsonr)
-    else:
-        print('- Evaluating {p} in the LD embedding obtained by {n}'.format(n=meth_name, p=paths.pearson_corr_name_long))
-        t0 = time.time()
-        
-        dv_hd = dr_quality.make_dist_vector(dm_hd)
-        dv_ld = dr_quality.make_dist_vector(dld)
-        
-        pr = scipy.stats.pearsonr(dv_hd, dv_ld).statistic
-        
-        tf = time.time() - t0
-        print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
-        
-        np.save(path_pearsonr, pr)
-    
-    if os.path.exists(path_Knn_recall):
-        knn_recall = np.load(path_Knn_recall)
-    else:
-        knn_recall, nn_hd = dr_quality.eval_knn_recall(X_hd=X_hd, X_ld=X_ld, nn_hd=nn_hd)
-        np.save(path_Knn_recall, knn_recall)
-    
-    D_qa = dict()
-    D_qa[paths.auc_name] = auc
-    D_qa[paths.sigma_d_name] = sigma_d
-    D_qa[paths.knn_recall_name] = knn_recall
-    D_qa[paths.pearson_corr_name] = pr
-    
-    print("**********")
-    print('Results of the quality assessment of the {dim_LDS}-D embedding obtained by {n}'.format(n=meth_name, dim_LDS=dim_LDS))
-    print('---')
-    
-    for score in D_qa.keys():
-        if np.isfinite(D_qa[score]):
-            str_score = plot_fcts.rstr(D_qa[score], d=4)
+        if os.path.exists(path_auc):
+            auc = np.load(path_auc)
         else:
-            str_score = D_qa[score]
-        print("{n} [ {score} ] = {v}".format(n=meth_name, score=score, v=str_score))
-    
-    print('---')
-    
-    return X_ld, nn_hd, dm_hd
+            print('- Evaluating the {a} of the LD embedding obtained by {n}'.format(n=meth_name, a=paths.auc_name))
+            t0 = time.time()
+            rnx, auc = dr_quality.eval_dr_quality(d_hd=dm_hd, d_ld=dld)
+            tf = time.time() - t0
+            print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
+            
+            np.save(path_auc, auc)
+        
+        if os.path.exists(path_sigmad):
+            sigma_d = np.load(path_sigmad)
+        else:
+            print('- Evaluating the {s} of the LD embedding obtained by {n}'.format(n=meth_name, s=paths.sigma_d_name))
+            t0 = time.time()
+            sigma_d = dr_quality.eval_sigma_distortion(d_hd=dr_quality.make_dist_vector(dm_hd), d_ld=dr_quality.make_dist_vector(dld))
+            tf = time.time() - t0
+            print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
+            
+            np.save(path_sigmad, sigma_d)
+        
+        if os.path.exists(path_pearsonr):
+            pr = np.load(path_pearsonr)
+        else:
+            print('- Evaluating {p} in the LD embedding obtained by {n}'.format(n=meth_name, p=paths.pearson_corr_name_long))
+            t0 = time.time()
+            
+            dv_hd = dr_quality.make_dist_vector(dm_hd)
+            dv_ld = dr_quality.make_dist_vector(dld)
+            
+            pr = scipy.stats.pearsonr(dv_hd, dv_ld).statistic
+            
+            tf = time.time() - t0
+            print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
+            
+            np.save(path_pearsonr, pr)
+        
+        if os.path.exists(path_Knn_recall):
+            knn_recall = np.load(path_Knn_recall)
+        else:
+            knn_recall, nn_hd = dr_quality.eval_knn_recall(X_hd=X_hd, X_ld=X_ld, nn_hd=nn_hd)
+            np.save(path_Knn_recall, knn_recall)
+        
+        D_qa = dict()
+        D_qa[paths.auc_name] = auc
+        D_qa[paths.sigma_d_name] = sigma_d
+        D_qa[paths.knn_recall_name] = knn_recall
+        D_qa[paths.pearson_corr_name] = pr
+        
+        print("**********")
+        print('Results of the quality assessment of the {dim_LDS}-D embedding obtained by {n}'.format(n=meth_name, dim_LDS=dim_LDS))
+        print('---')
+        
+        for score in D_qa.keys():
+            if np.isfinite(D_qa[score]):
+                str_score = plot_fcts.rstr(D_qa[score], d=4)
+            else:
+                str_score = D_qa[score]
+            print("{n} [ {score} ] = {v}".format(n=meth_name, score=score, v=str_score))
+        
+        print('---')
+        
+        return X_ld, nn_hd, dm_hd
 
 def compute_embs_and_quality(X_hd, pca_preproc, data_name, res_path_emb, res_path_qa, check_duplicates=False, compute_pca_preserved_var=False, X_hd_nopca=None, genomes=False):
     """
@@ -264,7 +272,7 @@ def compute_embs_and_quality(X_hd, pca_preproc, data_name, res_path_emb, res_pat
     # Targeted dimension of the LD embedding
     dim_LDS = params.dim_LDS
     # Random seed. 
-    seed = 40
+    seed = params.seed
     
     ##############################
     ############################## 
