@@ -100,11 +100,12 @@ def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, co
     path_emb = '{rp}{npath}.npy'.format(rp=res_path_emb, npath=meth_name4path)
     plot_fcts.check_create_dir(path_emb)
     
-    path_auc = '{rp}{npath}-{a}.npy'.format(rp=res_path_qa, npath=meth_name4path, a=paths.auc_path)
-    path_Knn_recall = '{rp}{npath}-{k}.npy'.format(rp=res_path_qa, npath=meth_name4path, k=paths.knn_recall_path)
-    path_sigmad = '{rp}{npath}-{s}.npy'.format(rp=res_path_qa, npath=meth_name4path, s=paths.sigma_d_path)
-    path_pearsonr = '{rp}{npath}-{p}.npy'.format(rp=res_path_qa, npath=meth_name4path, p=paths.pearson_corr_path)
-    plot_fcts.check_create_dir(path_auc)
+    if not skip_qa:
+        path_auc = '{rp}{npath}-{a}.npy'.format(rp=res_path_qa, npath=meth_name4path, a=paths.auc_path)
+        path_Knn_recall = '{rp}{npath}-{k}.npy'.format(rp=res_path_qa, npath=meth_name4path, k=paths.knn_recall_path)
+        path_sigmad = '{rp}{npath}-{s}.npy'.format(rp=res_path_qa, npath=meth_name4path, s=paths.sigma_d_path)
+        path_pearsonr = '{rp}{npath}-{p}.npy'.format(rp=res_path_qa, npath=meth_name4path, p=paths.pearson_corr_path)
+        plot_fcts.check_create_dir(path_auc)
     
     if (meth_name4path == paths.pca_path) and pca_preproc:
         # X_hd has been preprocessed into its principal components => just extract the first PCs. 
@@ -116,7 +117,7 @@ def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, co
         
         t0 = time.time()
         if meth_name4path == paths.pca_path:
-            X_ld = sklearn.decomposition.PCA(n_components=dim_LDS, copy=True, whiten=False, svd_solver='full', random_state=seed).fit_transform(X_hd)
+            X_ld = sklearn.decomposition.PCA(n_components=dim_LDS, copy=True, whiten=False, svd_solver='arpack', random_state=seed).fit_transform(X_hd)
         elif meth_name4path == paths.mds_path:
             X_ld = SQuaD_MDS.run_SQuaD_MDS(X_hd, {'in python':True})
         elif (len(meth_name4path) > 4) and (meth_name4path[:4] == paths.tsne_path_no_param):
@@ -125,7 +126,7 @@ def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, co
         elif (len(meth_name4path) > 4) and (meth_name4path[:4] == paths.umap_path_no_param):
             X_ld = umap.UMAP(n_neighbors=nn_umap, n_components=dim_LDS, metric='euclidean', output_metric='euclidean', min_dist=0.1, random_state=seed, init='spectral').fit_transform(X_hd)
         elif (len(meth_name4path) > 5) and (meth_name4path[:5] == paths.phate_path_no_param):
-            X_ld = phate.PHATE(n_components=dim_LDS, knn=nn_phate, decay=40, n_landmark=2000, t='auto', gamma=1, n_pca=100, mds_solver='sgd', knn_dist='euclidean', knn_max=None, mds_dist='euclidean', mds='metric', n_jobs=1, random_state=seed).fit_transform(X_hd)
+            X_ld = phate.PHATE(n_components=dim_LDS, knn=nn_phate, decay=40, n_landmark=2000, t='auto', gamma=1, n_pca=100, mds_solver='sgd', knn_dist='euclidean', knn_max=None, mds_dist='euclidean', mds='metric', n_jobs=5, random_state=seed).fit_transform(X_hd)
         elif (len(meth_name4path) > 2) and (meth_name4path[:2] == paths.LE_path_no_param):
             X_ld = sklearn.manifold.SpectralEmbedding(n_components=dim_LDS, affinity='nearest_neighbors', random_state=seed, n_neighbors=nn_LE).fit_transform(X_hd)
         elif meth_name4path == paths.mds_sklearn_path:

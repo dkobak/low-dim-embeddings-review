@@ -34,7 +34,7 @@ n_runs = 1
 ####################
 
 print('===')
-print("Starting quality assessment of {v} embeddings ({n_landmarks} landmarks)".format(n_landmarks=n_landmarks, v=paths.wiki_name))
+print("Processing {v} data ({n_landmarks} landmarks used to evaluate quality scores)".format(n_landmarks=n_landmarks, v=paths.wiki_name))
 print("===")
 
 # Checking whether the folder where to store the results exists
