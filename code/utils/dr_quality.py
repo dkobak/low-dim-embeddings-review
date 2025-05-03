@@ -58,7 +58,7 @@ def eval_sigma_distortion(d_hd, d_ld):
 # K-NN recall. 
 ####################
 
-def eval_knn_recall(X_hd, X_ld, nn_hd=None, metric_hd='minkowski', p_metric_hd=2, n_jobs=4):
+def eval_knn_recall(X_hd, X_ld, nn_hd=None, metric_hd='minkowski', p_metric_hd=2, n_jobs=5):
     """
     Compute KNN recall of an embedding with respect to a data set. Definition from 'Kobak, D., & Berens, P. (2019). The art of using t-SNE for single-cell transcriptomics. Nature communications, 10(1), 5416.': "The fraction of k-nearest neighbours in the original high-dimensional data that are preserved as k-nearest neighbours in the embedding. KNN quantifies preservation of the local, or microscopic structure."
     As in 'Kobak, D., & Berens, P. (2019). The art of using t-SNE for single-cell transcriptomics. Nature communications, 10(1), 5416.', we compute the average across all points. 

@@ -15,6 +15,9 @@ module_name = "params.py"
 # Targeted dimension of the LD embeddings
 dim_LDS = 2
 
+# Random seed
+seed = 40
+
 # Neighborhood size to compute K-NN recall (local quality assessment). Must be a strictly positive integer. 
 K_qa = 10
 
