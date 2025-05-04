@@ -50,9 +50,9 @@ print("===")
 if compute_pca_preserved_var:
     run_embs.preserved_variance_PCs(X=X_hd)
 
-print('Loading the LD embeddings')
+print('Computing LD embeddings')
 L_X_LD = list()
-L_names = [(paths.pca_name, paths.pca_path), (paths.mds_name, paths.mds_path), (paths.LE_name, paths.LE_path), (paths.phate_name, paths.phate_path), (paths.tsne_name, paths.tsne_path), (paths.umap_name, paths.umap_path)]
+L_names = [(paths.pca_name, paths.pca_path), (paths.mds_name, paths.mds_path), (paths.tsne_name, paths.tsne_path), (paths.umap_name, paths.umap_path), (paths.LE_name, paths.LE_path), (paths.phate_name, paths.phate_path)]
 for name, npath in L_names:
     L_X_LD.append(run_embs.apply_meth(X_hd=X_hd, meth_name=name, meth_name4path=npath, pca_preproc=False, compute_dist_HD=None, compute_dist_LD_qa=None, seed=params.seed, res_path_emb=paths.wiki_emb, res_path_qa=None, dim_LDS=params.dim_LDS, perp_tsne=params.perp_tsne, nn_umap=params.nn_umap, nn_phate=params.nn_phate, nn_LE=params.nn_LE, skip_qa=True))
 print("===")
