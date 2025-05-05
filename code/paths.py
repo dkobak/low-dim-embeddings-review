@@ -71,6 +71,7 @@ phate_name = '{v} ({n} neighbors)'.format(n=params.nn_phate, v=phate_name_no_par
 # Name of some embedding methods in paths without indicating their parameter values
 LE_path_no_param = 'LE'
 tsne_path_no_param = 'tsne'
+tsne_sklearn_path_no_param = 'tsne_sklearn'
 umap_path_no_param = 'umap'
 phate_path_no_param = 'phate'
 
@@ -80,6 +81,7 @@ mds_path = 'mds'
 mds_sklearn_path = 'mds_sklearn'
 LE_path = '{v}-n{n}'.format(n=params.nn_LE, v=LE_path_no_param)
 tsne_path = '{v}-p{p}'.format(v=tsne_path_no_param, p=int(round(params.perp_tsne)))
+tsne_sklearn_path = '{v}-p{p}'.format(v=tsne_sklearn_path_no_param, p=int(round(params.perp_tsne)))
 umap_path = '{v}-n{n}'.format(n=params.nn_umap, v=umap_path_no_param)
 phate_path = '{v}-n{n}'.format(n=params.nn_phate, v=phate_path_no_param)
 

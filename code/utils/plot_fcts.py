@@ -235,50 +235,50 @@ def viz_2d_emb(X, vcol, tit='', fname=None, f_format=None, ax_def=None, flipx=Fa
             # Adjusting labels
             if tsne_tasic:
                 if bigC == 'Lamp5': #
-                    D_bigC[bigC]['avg_pos'][0] += 0.05
-                    D_bigC[bigC]['avg_pos'][1] -= 0.06
+                    D_bigC[bigC]['avg_pos'][0] += 0.02
+                    D_bigC[bigC]['avg_pos'][1] -= 0.065
                 elif bigC == 'Sncg': #
                     D_bigC[bigC]['avg_pos'][0] += 0.0
                     D_bigC[bigC]['avg_pos'][1] -= 0.05
                 elif bigC == 'Serpinf1': #
-                    D_bigC[bigC]['avg_pos'][0] += 0.03
-                    D_bigC[bigC]['avg_pos'][1] += 0.005
+                    D_bigC[bigC]['avg_pos'][0] += 0.0175
+                    D_bigC[bigC]['avg_pos'][1] += 0.01
                 elif bigC == 'Vip': #
                     D_bigC[bigC]['avg_pos'][0] -= 0.005
-                    D_bigC[bigC]['avg_pos'][1] += 0.02
+                    D_bigC[bigC]['avg_pos'][1] += 0.015
                 elif bigC == 'Sst': #
-                    D_bigC[bigC]['avg_pos'][0] -= 0.05
-                    D_bigC[bigC]['avg_pos'][1] += 0.05
+                    D_bigC[bigC]['avg_pos'][0] += 0.018
+                    D_bigC[bigC]['avg_pos'][1] -= 0.02
                 elif bigC == 'Pvalb': #
                     D_bigC[bigC]['avg_pos'][0] -= 0.075
-                    D_bigC[bigC]['avg_pos'][1] += 0.0
-                elif bigC == 'L2/3 IT': #
-                    D_bigC[bigC]['avg_pos'][0] += 0.0
-                    D_bigC[bigC]['avg_pos'][1] += 0.125
-                elif bigC == 'L4 IT': #
-                    D_bigC[bigC]['avg_pos'][0] -= 0.065
-                    D_bigC[bigC]['avg_pos'][1] += 0.055
-                elif bigC == 'L5 IT': #
-                    D_bigC[bigC]['avg_pos'][0] -= 0.125
-                    D_bigC[bigC]['avg_pos'][1] += 0.025
-                elif bigC == 'L6 IT': #
-                    D_bigC[bigC]['avg_pos'][0] -= 0.075
                     D_bigC[bigC]['avg_pos'][1] -= 0.015
+                elif bigC == 'L2/3 IT': #
+                    D_bigC[bigC]['avg_pos'][0] -= 0.095
+                    D_bigC[bigC]['avg_pos'][1] += 0.0
+                elif bigC == 'L4 IT': #
+                    D_bigC[bigC]['avg_pos'][0] += 0.115
+                    D_bigC[bigC]['avg_pos'][1] += 0.0
+                elif bigC == 'L5 IT': #
+                    D_bigC[bigC]['avg_pos'][0] -= 0.11
+                    D_bigC[bigC]['avg_pos'][1] += 0.02
+                elif bigC == 'L6 IT': #
+                    D_bigC[bigC]['avg_pos'][0] += 0.015
+                    D_bigC[bigC]['avg_pos'][1] += 0.105
                 elif bigC == 'L5 PT': #
-                    D_bigC[bigC]['avg_pos'][0] -= 0.05
-                    D_bigC[bigC]['avg_pos'][1] += 0.06
+                    D_bigC[bigC]['avg_pos'][0] -= 0.12
+                    D_bigC[bigC]['avg_pos'][1] -= 0.04
                 elif bigC == 'L5 NP': #
-                    D_bigC[bigC]['avg_pos'][0] += 0.0
-                    D_bigC[bigC]['avg_pos'][1] += 0.075
+                    D_bigC[bigC]['avg_pos'][0] -= 0.075
+                    D_bigC[bigC]['avg_pos'][1] += 0.04
                 elif bigC == 'L6 NP': #
-                    D_bigC[bigC]['avg_pos'][0] += 0.1
-                    D_bigC[bigC]['avg_pos'][1] -= 0.01
+                    D_bigC[bigC]['avg_pos'][0] += 0.01
+                    D_bigC[bigC]['avg_pos'][1] -= 0.04
                 elif bigC == 'L6 CT': #
-                    D_bigC[bigC]['avg_pos'][0] += 0.05
+                    D_bigC[bigC]['avg_pos'][0] += 0.0
                     D_bigC[bigC]['avg_pos'][1] += 0.085
                 elif bigC == 'L6b': #
-                    D_bigC[bigC]['avg_pos'][0] -= 0.06
-                    D_bigC[bigC]['avg_pos'][1] += 0.0
+                    D_bigC[bigC]['avg_pos'][0] -= 0.05
+                    D_bigC[bigC]['avg_pos'][1] += 0.04
             elif umap_tasic:
                 if bigC == 'Lamp5': 
                     D_bigC[bigC]['avg_pos'][0] += 0.085

@@ -35,3 +35,6 @@ nn_phate = 5
 
 # Format to save the figures
 f_format = 'png'
+
+# Number of processors to use when running parallel jobs
+n_jobs = 3
