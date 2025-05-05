@@ -58,7 +58,7 @@ def eval_sigma_distortion(d_hd, d_ld):
 # K-NN recall. 
 ####################
 
-def eval_knn_recall(X_hd, X_ld, nn_hd=None, metric_hd='minkowski', p_metric_hd=2, n_jobs=5):
+def eval_knn_recall(X_hd, X_ld, nn_hd=None, metric_hd='minkowski', p_metric_hd=2):
     """
     Compute KNN recall of an embedding with respect to a data set. Definition from 'Kobak, D., & Berens, P. (2019). The art of using t-SNE for single-cell transcriptomics. Nature communications, 10(1), 5416.': "The fraction of k-nearest neighbours in the original high-dimensional data that are preserved as k-nearest neighbours in the embedding. KNN quantifies preservation of the local, or microscopic structure."
     As in 'Kobak, D., & Berens, P. (2019). The art of using t-SNE for single-cell transcriptomics. Nature communications, 10(1), 5416.', we compute the average across all points. 
@@ -68,7 +68,6 @@ def eval_knn_recall(X_hd, X_ld, nn_hd=None, metric_hd='minkowski', p_metric_hd=2
     - X_ld: a 2-D np.ndarray with shape (N,P) storing an embedding of X_hd. X_ld[i,:] is the embedded representation of X_hd[i,:].
     - metric_hd: metric parameter of sklearn.neighbors.NearestNeighbors.
     - p_metric_hd: p parameter of sklearn.neighbors.NearestNeighbors.
-    - n_jobs: n_jobs parameter of sklearn.neighbors.NearestNeighbors.
     - nn_hd: if None, set to the output of sklearn.neighbors.NearestNeighbors(n_neighbors=K_qa + 1, algorithm='auto', metric=metric_hd, p=p_metric_hd).fit(X_hd).kneighbors_graph(X_hd), with K_qa defined as a global variable of this file. Otherwise, it is assumed to be the ooutput of this call. 
     Out:
     - knn_recall: a number between 0 and 1 being the K-NN recall. 
@@ -77,13 +76,13 @@ def eval_knn_recall(X_hd, X_ld, nn_hd=None, metric_hd='minkowski', p_metric_hd=2
     if nn_hd is None:
         print('- Computing the {K_qa}-NN graph in HD'.format(K_qa=params.K_qa))
         t0 = time.time()
-        nn_hd = sklearn.neighbors.NearestNeighbors(n_neighbors=params.K_qa + 1, algorithm='auto', metric=metric_hd, p=p_metric_hd, n_jobs=n_jobs).fit(X_hd).kneighbors_graph(X_hd)
+        nn_hd = sklearn.neighbors.NearestNeighbors(n_neighbors=params.K_qa + 1, algorithm='auto', metric=metric_hd, p=p_metric_hd, n_jobs=params.n_jobs).fit(X_hd).kneighbors_graph(X_hd)
         tf = time.time() - t0
         print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
     
     print('- Computing the {K_qa}-NN graph in LD'.format(K_qa=params.K_qa))
     t0 = time.time()
-    nn_ld = sklearn.neighbors.NearestNeighbors(n_neighbors=params.K_qa + 1, algorithm='auto', n_jobs=n_jobs).fit(X_ld).kneighbors_graph(X_ld)
+    nn_ld = sklearn.neighbors.NearestNeighbors(n_neighbors=params.K_qa + 1, algorithm='auto', n_jobs=params.n_jobs).fit(X_ld).kneighbors_graph(X_ld)
     tf = time.time() - t0
     print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
     
