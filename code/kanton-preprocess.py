@@ -1,5 +1,6 @@
 
 import paths, numpy as np, pandas as pd, requests, os, json
+from utils.preprocess import featureSelection
 from scipy.io import mmread
 from scipy import sparse
 
@@ -40,7 +41,9 @@ def preprocess(metafile, countfile, line, n=1000, decay=1.5, n_components=50):
     print('Number of genes:', counts.shape[1])
     print(f'Fraction of zeros in the data matrix: {counts.size / np.prod(counts.shape):.2f}')
 
-    impGenes = geneSelection(counts[ind, :], n=n, decay=decay)
+    meanExpr, zeroRate = meanExpr_zeroRate_kanton(counts[ind, :], threshold=0, atleast=10)
+
+    impGenes = featureSelection(meanLogExpression=meanExpr, nearZeroRate=zeroRate, n=n, decay=decay)
 
     # Transformations
     logcounts = np.log2(counts[:, impGenes][ind, :].toarray() / seqDepths * np.median(seqDepths) + 1)
@@ -51,16 +54,8 @@ def preprocess(metafile, countfile, line, n=1000, decay=1.5, n_components=50):
 
     return X, logcounts, stage
 
-def geneSelection(
-    data,
-    threshold=0,
-    atleast=10,
-    yoffset=0.02,
-    xoffset=5,
-    decay=1.5,
-    n=1000,
-):
 
+def meanExpr_zeroRate_kanton(data, threshold=0, atleast=10):
     zeroRate = 1 - np.squeeze(np.array((data > threshold).mean(axis=0)))
     A = data.multiply(data > threshold)
     A.data = np.log2(A.data)
@@ -73,25 +68,7 @@ def geneSelection(
     lowDetection = np.array(np.sum(data > threshold, axis=0)).squeeze() < atleast
     zeroRate[lowDetection] = np.nan
     meanExpr[lowDetection] = np.nan
-
-    up = 10
-    low = 0
-    for t in range(100):
-        nonan = ~np.isnan(zeroRate)
-        selected = np.zeros_like(zeroRate).astype(bool)
-        selected[nonan] = (
-            zeroRate[nonan] > np.exp(-decay * (meanExpr[nonan] - xoffset)) + yoffset
-        )
-        if np.sum(selected) == n:
-            break
-        elif np.sum(selected) < n:
-            up = xoffset
-            xoffset = (xoffset + low) / 2
-        else:
-            low = xoffset
-            xoffset = (xoffset + up) / 2
-
-    return selected
+    return meanExpr, zeroRate
 
 
 def load_kanton(root_path=paths.kanton_data):
