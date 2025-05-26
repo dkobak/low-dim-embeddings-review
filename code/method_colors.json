@@ -1,0 +1,14 @@
+{
+    "Isomap (2000)": {"color": "#80418F", "name": "Plum"},
+    "LLE (2000)": {"color": "#087CA7", "name": "Cerulean"},
+    "Lapl. Eig. (2003)": {"color": "#EDA958", "name": "Earth Yellow"},
+    "SNE (2003)": {"color": "#F35264", "name": "Crayola Red"},
+    "Diffusion Maps (2006)": {"color": "#CFD4E0", "name": "French Grey"},
+    "t-SNE (2008)": {"color": "#475C8F", "name": "Navy Blue"},
+    "UMAP (2018)": {"color": "#FA826B", "name": "Salmon"},
+    "PHATE (2019)": {"color": "#579DA3", "name": "Moonstone Green"},
+    "PCA (1901)": {"color": "#d61d22", "name": "Bright Red"},
+    "MDS (1938)": {"color": "#97bb3c", "name": "Lime Green"}
+
+
+}
