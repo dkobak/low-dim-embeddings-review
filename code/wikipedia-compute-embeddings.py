@@ -4,15 +4,15 @@
 ########################################################################################################
 ########################################################################################################
 
-# Assessing DR quality and distortions of LD embeddings of Simple English Wikipedia data.
+# Computing LD embeddings of Simple English Wikipedia data, and assessing their quality.
 
 ########################################################################################################
 ########################################################################################################
 
-import numpy as np, time, os, scipy.stats, datasets, utils.plot_fcts as plot_fcts, utils.dr_quality as dr_quality, paths, params, utils.run_embs as run_embs
+import numpy as np, time, os, scipy.stats, datasets, utils.plot_fcts as plot_fcts, utils.dr_quality as dr_quality, paths, params, utils.run_embs as run_embs, sklearn.preprocessing
 
 # Name of this file
-module_name = "wikipedia_quality.py"
+module_name = "wikipedia-compute-embeddings.py"
 
 ##############################
 ############################## 
@@ -47,12 +47,15 @@ print('- Number of samples: ', X_hd.shape[0]) # 485,859
 print('- Number of features:', X_hd.shape[1]) # 768
 print("===")
 
+# Normalizing the samples
+X_hd = sklearn.preprocessing.normalize(X_hd, norm='l2', axis=1, copy=False, return_norm=False)
+
 if compute_pca_preserved_var:
     run_embs.preserved_variance_PCs(X=X_hd)
 
 print('Computing LD embeddings')
 L_X_LD = list()
-L_names = [(paths.pca_name, paths.pca_path), (paths.mds_name, paths.mds_path), (paths.tsne_name, paths.tsne_path), (paths.umap_name, paths.umap_path), (paths.LE_name, paths.LE_path), (paths.phate_name, paths.phate_path)]
+L_names = [(paths.pca_name, paths.pca_path), (paths.mds_name, paths.mds_path), (paths.LE_name, paths.LE_path), (paths.phate_name, paths.phate_path), (paths.tsne_name, paths.tsne_path), (paths.umap_name, paths.umap_path)]
 for name, npath in L_names:
     L_X_LD.append(run_embs.apply_meth(X_hd=X_hd, meth_name=name, meth_name4path=npath, pca_preproc=False, compute_dist_HD=None, compute_dist_LD_qa=None, seed=params.seed, res_path_emb=paths.wiki_emb, res_path_qa=None, dim_LDS=params.dim_LDS, perp_tsne=params.perp_tsne, nn_umap=params.nn_umap, nn_phate=params.nn_phate, nn_LE=params.nn_LE, skip_qa=True))
 print("===")
@@ -109,7 +112,7 @@ for i_run in range(n_runs):
             print('- Estimating {v}'.format(v=paths.auc_name))
             
             t0 = time.time()
-            qnx, rnx, auc, landmarks = dr_quality.fast_eval_dr_quality(X_hd=X_hd, X_ld=L_X_LD[i_meth], dist_hd=dr_quality.cos_dist, dist_ld=dr_quality.eucl_dist, n=n_landmarks, seed=3+i_run, pow2K=False, vp_samp=False, samp=landmarks)
+            qnx, rnx, auc, landmarks = dr_quality.fast_eval_dr_quality(X_hd=X_hd, X_ld=L_X_LD[i_meth], dist_hd=dr_quality.eucl_dist, dist_ld=dr_quality.eucl_dist, n=n_landmarks, seed=3+i_run, pow2K=False, vp_samp=False, samp=landmarks)
             tf = time.time() - t0
             print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
             
@@ -125,7 +128,7 @@ for i_run in range(n_runs):
             
             print('- Computing HD distances')
             t0 = time.time()
-            dhds = dr_quality.dist_matr(X=X_hd, samp=landmarks, dist_fct=dr_quality.cos_dist)
+            dhds = dr_quality.dist_matr(X=X_hd, samp=landmarks, dist_fct=dr_quality.eucl_dist)
             tf = time.time() - t0
             print('-- Done. It took {tf} seconds.'.format(tf=plot_fcts.rstr(tf)))
             
@@ -155,7 +158,7 @@ for i_run in range(n_runs):
             if os.path.exists(res_path_meth_Knn_recall):
                 knn_recall = np.load(res_path_meth_Knn_recall)
             else:
-                knn_recall, nn_hd = dr_quality.eval_knn_recall(X_hd=X_hd, X_ld=L_X_LD[i_meth], nn_hd=nn_hd, metric_hd='cosine')
+                knn_recall, nn_hd = dr_quality.eval_knn_recall(X_hd=X_hd, X_ld=L_X_LD[i_meth], nn_hd=nn_hd, metric_hd='minkowski', p_metric_hd=2)
                 np.save(res_path_meth_Knn_recall, knn_recall)
             
             L_Knn_recalls[i_meth] = knn_recall

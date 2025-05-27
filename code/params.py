@@ -37,4 +37,4 @@ nn_phate = 5
 f_format = 'png'
 
 # Number of processors to use when running parallel jobs
-n_jobs = 3
+n_jobs = 8

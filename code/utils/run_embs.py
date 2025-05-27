@@ -64,6 +64,7 @@ def preserved_variance_PCs(X, nPCs=50):
         print('---> Explained variance ratio PC{i}: {v}'.format(i=i+1, v=str_expl_var_ratio))
     print('- Sum explained variance ratios first {nPCs} PCs: {v}'.format(nPCs=nPCs, v=plot_fcts.rstr(pca_model.explained_variance_ratio_.sum(), d=4)))
     print('- Sum explained variance ratios first 2 PCs: {v}'.format(v=plot_fcts.rstr(pca_model.explained_variance_ratio_[:2].sum(), d=4)))
+    print('- Sum explained variance ratios first 2 PCs / sum explained variance ratios first {nPCs} PCs: {v}'.format(nPCs=nPCs, v=plot_fcts.rstr(pca_model.explained_variance_ratio_[:2].sum() / pca_model.explained_variance_ratio_.sum(), d=4)))
     print('===')
 
 def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, compute_dist_LD_qa, seed, res_path_emb, res_path_qa, dim_LDS=2, perp_tsne=None, nn_umap=None, nn_phate=None, nn_LE=None, nn_hd=None, dm_hd=None, skip_qa=False):
