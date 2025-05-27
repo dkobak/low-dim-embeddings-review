@@ -31,8 +31,8 @@ check_duplicates = False
 # Number of features after PCA preprocessing: 50
 
 print('Loading {v} data'.format(v=paths.kanton_name))
-X_hd = np.load('{p}pca_True/human-409b2.data.npy'.format(p=paths.kanton_data))
-X_hd_nopca = np.load('{p}pca_False/human-409b2.data.npy'.format(p=paths.kanton_data)) if compute_pca_preserved_var else None
+X_hd = np.load('{p}human-409b2/preprocessed-data.npy'.format(p=paths.kanton_data))
+X_hd_nopca = np.load('{p}human-409b2/gene-selected-data.npy'.format(p=paths.kanton_data)) if compute_pca_preserved_var else None
 
 run_embs.compute_embs_and_quality(X_hd=X_hd, pca_preproc=True, data_name=paths.kanton_name, res_path_emb=paths.kanton_emb, res_path_qa=paths.kanton_qa, check_duplicates=check_duplicates, compute_pca_preserved_var=compute_pca_preserved_var, X_hd_nopca=X_hd_nopca, genomes=False)
 

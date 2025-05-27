@@ -21,10 +21,10 @@ module_name = "kanton-figure.py"
 ####################
 
 print('Loading {v} data'.format(v=paths.kanton_name))
-X_PCs = np.load('{p}pca_True/human-409b2.data.npy'.format(p=paths.kanton_data))[:,:2]
+X_PCs = np.load('{p}human-409b2/preprocessed-data.npy'.format(p=paths.kanton_data))[:,:2]
 
 # Loading metadata
-labels = np.load('{v}human-409b2.labels.npy'.format(v=paths.kanton_data))
+labels = np.load('{v}human-409b2/labels.npy'.format(v=paths.kanton_data))
 
 d = {"label_colors": {
     "iPSCs": "navy",
