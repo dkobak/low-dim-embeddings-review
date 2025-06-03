@@ -38,6 +38,7 @@ print("Processing {v} data ({n_landmarks} landmarks used to evaluate quality sco
 print("===")
 
 # Checking whether the folder where to store the results exists
+plot_fcts.check_create_dir(paths.wiki_emb)
 plot_fcts.check_create_dir(paths.wiki_qa)
 
 print('Loading HD data')

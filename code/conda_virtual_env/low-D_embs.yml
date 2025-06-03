@@ -1,0 +1,17 @@
+name: low-D_embs
+channels:
+  - defaults
+dependencies:
+  - matplotlib
+  - numba
+  - opentsne
+  - umap-learn
+  - scikit-learn
+  - requests
+  - python
+  - datasets
+  - pandas
+  - scipy
+  - numpy
+  - sgkit
+prefix: C:\Users\cyril\anaconda3\envs\low-D_embs
