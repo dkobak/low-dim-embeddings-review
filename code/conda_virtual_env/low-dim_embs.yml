@@ -1,0 +1,19 @@
+name: low-dim_embs
+channels:
+  - conda-forge
+  - huggingface
+  - defaults
+dependencies:
+  - numpy=1.26.4
+  - scipy=1.13.1
+  - numba=0.60.0
+  - matplotlib=3.9.2
+  - scikit-learn=1.5.1
+  - python=3.12.3
+  - opentsne=1.0.2
+  - sgkit
+  - umap-learn=0.5.7
+  - requests=2.32.3
+  - datasets=3.1.0
+  - pandas
+prefix: /home/cdebodt/miniconda3/envs/low-dim_embs
