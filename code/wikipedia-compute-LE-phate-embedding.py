@@ -47,6 +47,10 @@ X_hd = sklearn.preprocessing.normalize(X_hd, norm='l2', axis=1, copy=False, retu
 if compute_pca_preserved_var:
     run_embs.preserved_variance_PCs(X=X_hd)
 
+print('Computing LE embedding')
+run_embs.apply_meth(X_hd=X_hd, meth_name=paths.LE_name, meth_name4path=paths.LE_path, pca_preproc=False, compute_dist_HD=None, compute_dist_LD_qa=None, seed=params.seed, res_path_emb=paths.wiki_emb, res_path_qa=None, dim_LDS=params.dim_LDS, perp_tsne=params.perp_tsne, nn_umap=params.nn_umap, nn_phate=params.nn_phate, nn_LE=params.nn_LE, skip_qa=True)
+print("===")
+
 print('Computing PHATE embedding')
 run_embs.apply_meth(X_hd=X_hd, meth_name=paths.phate_name, meth_name4path=paths.phate_path, pca_preproc=False, compute_dist_HD=None, compute_dist_LD_qa=None, seed=params.seed, res_path_emb=paths.wiki_emb, res_path_qa=None, dim_LDS=params.dim_LDS, perp_tsne=params.perp_tsne, nn_umap=params.nn_umap, nn_phate=params.nn_phate, nn_LE=params.nn_LE, skip_qa=True)
 print("===")
