@@ -131,7 +131,7 @@ def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, co
             mds_model = sklearn.manifold.MDS(n_components=dim_LDS, metric=True, n_init=4, max_iter=300, verbose=0, eps=0.001, n_jobs=params.n_jobs, random_state=seed, dissimilarity='euclidean', normalized_stress='auto')
             X_ld = mds_model.fit_transform(X_hd, init=X_init) 
         elif (len(meth_name4path) > 2) and (meth_name4path[:2] == paths.LE_path_no_param):
-            X_ld = sklearn.manifold.SpectralEmbedding(n_components=dim_LDS, affinity='nearest_neighbors', random_state=seed, n_neighbors=nn_LE, n_jobs=params.n_jobs).fit_transform(X_hd)
+            X_ld = sklearn.manifold.SpectralEmbedding(n_components=dim_LDS, affinity='nearest_neighbors', random_state=seed, eigen_solver='amg' if X_hd.shape[0] > 100000 else 'arpack', eigen_tol='auto', n_neighbors=nn_LE, n_jobs=params.n_jobs).fit_transform(X_hd)
         elif (len(meth_name4path) > 5) and (meth_name4path[:5] == paths.phate_path_no_param):
             X_ld = phate.PHATE(n_components=dim_LDS, knn=nn_phate, decay=40, n_landmark=2000, t='auto', gamma=1, n_pca=100, mds_solver='sgd', knn_dist='euclidean', knn_max=None, mds_dist='euclidean', mds='metric', n_jobs=params.n_jobs, random_state=seed).fit_transform(X_hd)
         elif (len(meth_name4path) > 12) and (meth_name4path[:12] == paths.tsne_sklearn_path_no_param):
