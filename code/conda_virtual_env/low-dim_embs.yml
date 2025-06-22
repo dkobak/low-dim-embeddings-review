@@ -16,4 +16,5 @@ dependencies:
   - requests=2.32.3
   - datasets=3.1.0
   - pandas
+  - pyamg
 prefix: /home/cdebodt/miniconda3/envs/low-dim_embs
