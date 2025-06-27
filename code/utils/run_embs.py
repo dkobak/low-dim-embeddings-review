@@ -116,6 +116,8 @@ def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, co
     else:
         print('Applying {n} on the data set to obtain a {dim_LDS}-D embedding'.format(dim_LDS=dim_LDS, n=meth_name))
         
+        big_data_set = X_hd.shape[0] > 100000
+        
         t0 = time.time()
         if meth_name4path == paths.pca_path:
             X_ld = sklearn.decomposition.PCA(n_components=dim_LDS, copy=True, whiten=False, svd_solver='arpack', random_state=seed).fit_transform(X_hd)
@@ -131,7 +133,7 @@ def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, co
             mds_model = sklearn.manifold.MDS(n_components=dim_LDS, metric=True, n_init=4, max_iter=300, verbose=0, eps=0.001, n_jobs=params.n_jobs, random_state=seed, dissimilarity='euclidean', normalized_stress='auto')
             X_ld = mds_model.fit_transform(X_hd, init=X_init) 
         elif (len(meth_name4path) > 2) and (meth_name4path[:2] == paths.LE_path_no_param):
-            X_ld = sklearn.manifold.SpectralEmbedding(n_components=dim_LDS, affinity='nearest_neighbors', random_state=seed, eigen_solver='amg' if X_hd.shape[0] > 100000 else 'arpack', eigen_tol='auto', n_neighbors=nn_LE, n_jobs=params.n_jobs).fit_transform(X_hd)
+            X_ld = sklearn.manifold.SpectralEmbedding(n_components=dim_LDS, affinity='nearest_neighbors', random_state=seed, eigen_solver='amg' if big_data_set else 'arpack', eigen_tol='auto', n_neighbors=nn_LE, n_jobs=params.n_jobs).fit_transform(X_hd)
         elif (len(meth_name4path) > 5) and (meth_name4path[:5] == paths.phate_path_no_param):
             X_ld = phate.PHATE(n_components=dim_LDS, knn=nn_phate, decay=40, n_landmark=2000, t='auto', gamma=1, n_pca=100, mds_solver='sgd', knn_dist='euclidean', knn_max=None, mds_dist='euclidean', mds='metric', n_jobs=params.n_jobs, random_state=seed).fit_transform(X_hd)
         elif (len(meth_name4path) > 12) and (meth_name4path[:12] == paths.tsne_sklearn_path_no_param):
@@ -141,7 +143,7 @@ def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, compute_dist_HD, co
             X_ld = openTSNE.TSNE(n_components=dim_LDS, perplexity=perp_tsne, initialization='pca', metric='euclidean', n_jobs=params.n_jobs, random_state=seed).fit(X_hd)
         elif (len(meth_name4path) > 4) and (meth_name4path[:4] == paths.umap_path_no_param):
             # n_jobs is set to 1 in the next line because parallelism is not supported when specifying a random seed
-            X_ld = umap.UMAP(n_neighbors=nn_umap, n_components=dim_LDS, metric='euclidean', output_metric='euclidean', min_dist=0.1, random_state=seed, init='spectral', n_jobs=1).fit_transform(X_hd)
+            X_ld = umap.UMAP(n_neighbors=nn_umap, n_components=dim_LDS, metric='euclidean', output_metric='euclidean', min_dist=0.1, random_state=42 if big_data_set else seed, init='spectral', n_jobs=1, n_epochs=500 if big_data_set else None).fit_transform(X_hd)
         else:
             raise ValueError('In apply_meth of {module_name}: unknown method "{npath}"'.format(module_name=module_name, npath=meth_name4path))
         t = time.time() - t0
