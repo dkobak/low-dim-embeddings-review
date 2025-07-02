@@ -1,6 +1,58 @@
 # Low-dimensional embeddings of high-dimensional data
 
-## Genome pre-processing
+This is a companion repository to our paper (de Bodt & Diaz-Papkovich et al. 2025, Low-dimensional embeddings of high-dimensional data). All code is in Python. 
+
+## Content of the repository
+
+This repository is structured as follows:
+
+- `./code`: contains all code files.
+
+-- `./wikipedia-compute-embeddings.py`: 
+
+-- `./conda_virtual_env/low-dim_embs.yml`: indicates employed package versions. Run
+
+```
+conda env create -f low-dim_embs.yml
+```
+
+to create a `low-dim_embs` conda virtual environment with these package versions. Then, run
+
+```
+pip install --user phate==1.0.11
+```
+
+to install the version of the `phate` package that we used. 
+
+-- `./utils`: 
+
+--- `./utils/SQuaD_MDS.py`: 
+
+--- `./utils/dr_quality.py`: 
+
+--- `./utils/mpl_style.txt`: 
+
+--- `./utils/plot_fcts.py`: 
+
+--- `./utils/preprocess.py`: 
+
+--- `./utils/run_embs.py`: 
+
+- `./data`: contains all data files.
+
+- `./figures`: contains all figures.
+
+- `./results`: contains all result files.
+
+## Tasic et al. data pre-processing
+
+Todo
+
+## Kanton et al. data pre-processing
+
+Todo
+
+## 1000 Genome Projet data pre-processing
 
 We use data from the 1000 Genomes Project. It can be obtained here:
 
