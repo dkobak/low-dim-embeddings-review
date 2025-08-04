@@ -16,8 +16,10 @@ from matplotlib import style
 # Name of this file
 module_name = "plot_fcts.py"
 
-plt.rcParams['text.usetex'] = True
+plt.rcParams['text.usetex'] = False
 plt.style.use('./utils/mpl_style.txt') 
+
+#plt.style.use("opinionated_rc")
 
 ##############################
 ##############################
@@ -54,7 +56,7 @@ def check_create_dir(path):
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
 
-def save_show_fig(fname=None, f_format=None, dpi=300):
+def save_show_fig(fname=None, f_format=None, dpi=1200):
     """
     Save or show a figure.
     In:
@@ -190,7 +192,7 @@ def viz_2d_emb(X, vcol, tit='', fname=None, f_format=None, ax_def=None, flipx=Fa
     ax.set_xticklabels([], minor=False)
     ax.set_yticklabels([], minor=False)
     
-    ax.set_title(tit, color="black", fontweight="bold")
+    ax.set_title(tit, color="black", fontweight="bold", loc='left')
     
     # Making the axes invisible
     for side in ['bottom', 'top', 'left', 'right']:
@@ -599,8 +601,8 @@ def create_2x3_figure(data_name, emb_path, fig_path, arr_colors, f_format='png',
     else:
         flipx = False
         flipy = False
-    
-    viz_2d_emb(X=X_LE, vcol=arr_colors, tit=paths.LE_name_no_param, ax_def=gs[0,1], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, LE_tasic=data_name == paths.tasic_name, LE_genomes=data_name == paths.genomes_name, LE_kanton=data_name == paths.kanton_name, D_viz_emb=D_viz_emb)
+    #tit=paths.LE_name_no_param
+    viz_2d_emb(X=X_LE, vcol=arr_colors, tit="Lapl. Eig.", ax_def=gs[0,1], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, LE_tasic=data_name == paths.tasic_name, LE_genomes=data_name == paths.genomes_name, LE_kanton=data_name == paths.kanton_name, D_viz_emb=D_viz_emb)
     
     ##############################
     ############################## 
@@ -644,7 +646,7 @@ def create_2x3_figure(data_name, emb_path, fig_path, arr_colors, f_format='png',
         flipx = False
         flipy = False
     
-    viz_2d_emb(X=X_tsne, vcol=arr_colors, tit=r'\textit{t}-SNE', ax_def=gs[0,2], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, tsne_tasic=data_name == paths.tasic_name, D_viz_emb=D_viz_emb)
+    viz_2d_emb(X=X_tsne, vcol=arr_colors, tit=r't-SNE', ax_def=gs[0,2], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, tsne_tasic=data_name == paths.tasic_name, D_viz_emb=D_viz_emb)
     
     ##############################
     ############################## 

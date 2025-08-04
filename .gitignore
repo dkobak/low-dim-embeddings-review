@@ -1,0 +1,16 @@
+
+# macOS system files
+**/.DS_Store
+**/.DS_Store?
+**/.Trashes
+**/ehthumbs.db
+**/Thumbs.db
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Figure files with _mn suffixes
+*_mn.*

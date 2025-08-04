@@ -3,8 +3,9 @@ lines.linewidth: .75
 lines.markersize: 4
 
 #### * FONT *
-font.sans-serif: Arial
+font.sans-serif: Roboto Condensed
 font.size: 6
+
 
 #### * AXES *
 axes.titlesize: 7    
@@ -38,7 +39,7 @@ legend.fontsize: 6
 
 #### * FIGURE *
 figure.constrained_layout.use: True
-figure.dpi: 135      
+figure.dpi: 300      
 figure.facecolor: white    
 figure.titlesize: 8  
 
@@ -50,7 +51,7 @@ scatter.marker: ,
 scatter.edgecolors: none               
 
 #### * SAVING FIGURES *
-savefig.dpi: 200           
+savefig.dpi: 600           
 savefig.facecolor: white
 savefig.edgecolor: white
 savefig.orientation: portrait
