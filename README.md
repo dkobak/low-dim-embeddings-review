@@ -1,6 +1,6 @@
 # Low-dimensional embeddings of high-dimensional data
 
-This is a companion repository to our paper (de Bodt & Diaz-Papkovich et al. 2025, Low-dimensional embeddings of high-dimensional data). All code is in Python. 
+This is a companion repository to our review paper [de Bodt & Diaz-Papkovich et al. 2025, Low-dimensional embeddings of high-dimensional data](https://arxiv.org/abs/2508.15929). All code is in Python. 
 
 ## Content of the repository
 
