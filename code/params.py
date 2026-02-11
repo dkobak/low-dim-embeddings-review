@@ -36,5 +36,8 @@ nn_phate = 5
 # Format to save the figures
 f_format = 'png'
 
+# Number of runs of a given embedding method that are conducted on a given data set to estimate its average computation time. 
+n_runs_meth_timing = 50
+
 # Number of processors to use when running parallel jobs
 n_jobs = 25

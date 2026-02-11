@@ -194,6 +194,13 @@ for i_meth in range(n_embs):
 ###
 ###
 ###
+
+# Estimating runtimes of embedding computation
+run_embs.compute_runtimes(X_hd=X_hd, pca_preproc=False, data_name=paths.wiki_name, res_path_emb=paths.wiki_emb, X_hd_nopca=X_hd, check_duplicates=False, genomes=False)
+
+###
+###
+###
 print('*********************')
 print('***** Done! :-) *****')
 print('*********************')
