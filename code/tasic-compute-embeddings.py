@@ -34,7 +34,11 @@ print('Loading {v} data'.format(v=paths.tasic_name))
 X_hd = np.load('{p}preprocessed-data.npy'.format(p=paths.tasic_data))
 X_hd_nopca = np.load('{p}gene-selected-data.npy'.format(p=paths.tasic_data)) if compute_pca_preserved_var else None
 
+# Computing embeddings
 run_embs.compute_embs_and_quality(X_hd=X_hd, pca_preproc=True, data_name=paths.tasic_name, res_path_emb=paths.tasic_emb, res_path_qa=paths.tasic_qa, check_duplicates=check_duplicates, compute_pca_preserved_var=compute_pca_preserved_var, X_hd_nopca=X_hd_nopca, genomes=False)
+
+# Estimating runtimes of embedding computation
+run_embs.compute_runtimes(X_hd=X_hd, pca_preproc=True, data_name=paths.tasic_name, res_path_emb=paths.tasic_emb, X_hd_nopca=X_hd_nopca, check_duplicates=check_duplicates, genomes=False)
 
 print('*********************')
 print('***** Done! :-) *****')
