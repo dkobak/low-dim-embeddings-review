@@ -106,7 +106,7 @@ def apply_meth(X_hd, meth_name, meth_name4path, pca_preproc, seed, res_path_emb,
         if (meth_name4path == paths.pca_path) and pca_preproc:
             raise ValueError('In apply_meth of {module_name}: pca_preproc cannot be True when meth_time is True and meth_name4path = "{v}".'.format(module_name=module_name, v=paths.pca_path))
         
-        path_timing = '{rp}{npath}-t'.format(rp=res_path_emb, npath=meth_name4path)
+        path_timing = '{rp}runtime/{npath}-t'.format(rp=res_path_emb, npath=meth_name4path)
         plot_fcts.check_create_dir(path_timing)
         
         n_tot_runs = params.n_runs_meth_timing
@@ -358,6 +358,115 @@ def compute_embs_and_quality(X_hd, pca_preproc, data_name, res_path_emb, res_pat
     # Applying PHATE
     ####################
     apply_meth(X_hd=X_hd, meth_name=paths.phate_name, meth_name4path=paths.phate_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb, res_path_qa=res_path_qa, dim_LDS=dim_LDS, nn_phate=params.nn_phate, nn_hd=nn_hd, dm_hd=dm_hd)
+
+def compute_embs_quality_sev_hps(X_hd, pca_preproc, data_name, res_path_emb, res_path_qa, check_duplicates=False, genomes=False):
+    """
+    Apply PCA, MDS, Laplacian Eigenmaps, t-SNE, UMAP and PHATE on a data set using several hyper-parameter values. Quality scores of the obtained embeddings are also computed. 
+    In:
+    - X_hd, pca_preproc, res_path_emb, res_path_qa: same as in apply_meth. 
+    - data_name: a string storing the name of the data to be embedded. 
+    - check_duplicates: boolean. If True, X_hd is checked for duplicated examples. 
+    - genomes: boolean. Set to True if 1000 Genomes data are employed. In this case, MDS implementation from scikit-learn is employed because this data set contains much less examples. It is then not necessary to use a fast implementation such as SQuadMDS. 
+    Out: /
+    """
+    print('===')
+    print("=== Processing {v} data using several hyper-parameter values".format(v=data_name))
+    print("===")
+    
+    n_samples = X_hd.shape[0]
+    n_features = X_hd.shape[1]
+    
+    print('Number of samples:  ', n_samples)
+    print('Number of features: ', n_features)
+    
+    ###
+    ###
+    ###
+    if check_duplicates:
+        print('- Checking if there are duplicated examples in the data set')
+        if contains_duplicates(X_hd):
+            print(' *** !!! Warning !!! *** The data set contains duplicated examples...')
+        else:
+            print('There are no duplicates.')
+        print('===')
+        print('===')
+        print('===')
+    
+    ###
+    ###
+    ###
+    # Function to compute distances in HD space. 
+    compute_dist_HD = eucl_dist_matr
+    # Function to compute distances in LD space (only used for quality assessment of the LD embeddings). 
+    compute_dist_LD_qa = eucl_dist_matr
+    # Targeted dimension of the LD embedding
+    dim_LDS = params.dim_LDS
+    # Random seed. 
+    seed = params.seed
+    
+    ##############################
+    ############################## 
+    # Applying PCA
+    ####################
+    X_ld_pca, nn_hd, dm_hd = apply_meth(X_hd=X_hd, meth_name=paths.pca_name, meth_name4path=paths.pca_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb, res_path_qa=res_path_qa, dim_LDS=dim_LDS)
+    
+    ##############################
+    ##############################
+    # Applying MDS
+    ####################
+    apply_meth(X_hd=X_hd, meth_name=paths.mds_name, meth_name4path=paths.mds_sklearn_path if genomes else paths.mds_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb, res_path_qa=res_path_qa, dim_LDS=dim_LDS, nn_hd=nn_hd, dm_hd=dm_hd)
+    
+    ###
+    ###
+    ###
+    # Storing results for multiple hyper-parameters values in subfolders
+    res_path_emb_hps = "{v}hps/".format(v=res_path_emb)
+    res_path_qa_hps = "{v}hps/".format(v=res_path_qa)
+    
+    # Total number of hyper-parameter values to consider
+    n_tot_nnp = len(params.L_nn_perp)
+    
+    # Looping over hyper-parameter values
+    for i_nnp, nnp in enumerate(params.L_nn_perp):
+        print('**')
+        print("** Considered number of neighbors or perplexity value: {v} (#{i_nnp}/{n_tot_nnp})".format(v=nnp, i_nnp=i_nnp+1, n_tot_nnp=n_tot_nnp))
+        print("**")
+        
+        cur_LE_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.LE_name_no_param)
+        cur_LE_path = '{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param)
+        
+        cur_tsne_name = '{v} (perplexity: {p})'.format(p=nnp, v=paths.tsne_name_no_param)
+        cur_tsne_path = '{v}-p{p}'.format(v=paths.tsne_path_no_param, p=int(round(nnp)))
+        
+        cur_umap_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.umap_name_no_param)
+        cur_umap_path = '{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param)
+        
+        cur_phate_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.phate_name_no_param)
+        cur_phate_path = '{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param)
+        
+        ##############################
+        ############################## 
+        # Applying Laplacian eigenmaps (LE)
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=cur_LE_name, meth_name4path=cur_LE_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_LE=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
+        
+        ##############################
+        ############################## 
+        # Applying t-SNE
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=cur_tsne_name, meth_name4path=cur_tsne_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, perp_tsne=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
+        
+        ##############################
+        ############################## 
+        # Applying UMAP
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=cur_umap_name, meth_name4path=cur_umap_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_umap=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
+        
+        ##############################
+        ############################## 
+        # Applying PHATE
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=cur_phate_name, meth_name4path=cur_phate_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_phate=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
 
 def display_timings(L_meth_timings, data_name):
     """

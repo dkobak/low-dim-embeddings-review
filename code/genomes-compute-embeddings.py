@@ -5,6 +5,7 @@
 ########################################################################################################
 
 # Running embedding methods on 1000 Genomes Project data, and evaluate their quality.
+# Runtimes are also estimated and embeddings are computed using several hyper-parameter values. 
 
 ########################################################################################################
 ########################################################################################################
@@ -37,6 +38,9 @@ run_embs.compute_embs_and_quality(X_hd=X_hd, pca_preproc=False, data_name=paths.
 
 # Estimating runtimes of embedding computation
 run_embs.compute_runtimes(X_hd=X_hd, pca_preproc=False, data_name=paths.genomes_name, res_path_emb=paths.genomes_emb, X_hd_nopca=X_hd_nopca, check_duplicates=check_duplicates, genomes=True)
+
+# Computing embeddings for several hyper-parameter values
+run_embs.compute_embs_quality_sev_hps(X_hd=X_hd, pca_preproc=False, data_name=paths.genomes_name, res_path_emb=paths.genomes_emb, res_path_qa=paths.genomes_qa, check_duplicates=check_duplicates, genomes=True)
 
 print('*********************')
 print('***** Done! :-) *****')
