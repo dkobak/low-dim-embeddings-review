@@ -14,17 +14,17 @@ This repository is structured as follows:
   - `./code/genome-preprocessing-2.py`: second step in pre-processing 1000 Genomes Project data. See below for more information. 
   - `./code/genomes-compute-embeddings.py`: computes 2-D embeddings of preprocessed 1000 Genomes Project data, and evaluates their quality. Runtimes are also estimated and embeddings are computed using several hyper-parameter values. 
   - `./code/genomes-figure.py`: produces a figure with 2-D embeddings of preprocessed 1000 Genomes Project data. The embeddings must have been computed using `./code/genomes-compute-embeddings.py` beforehand. 
-  - `./code/kanton-compute-embeddings.py`: computes 2-D embeddings of preprocessed Kanton et al. data, and evaluates their quality. Runtimes are also estimated and embeddings are computed using several hyper-parameter values. 
+  - `./code/kanton-compute-embeddings.py`: computes 2-D embeddings of preprocessed Kanton et al. data, and evaluates their quality. Runtimes can also be estimated (in this case, the original Kanton et al data must be downloaded as detailed below and preprocessed by running kanton-preprocess.py) and embeddings are computed using several hyper-parameter values. 
   - `./code/kanton-figure.py`: produces a figure with 2-D embeddings of preprocessed Kanton et al. data. The embeddings must have been computed using `./code/kanton-compute-embeddings.py` beforehand. 
   - `./code/kanton-preprocess.py`: preprocesses Kanton et al. data. Raw data are downloaded if needed. 
   - `./code/metrics.ipynb`: produces a figure summarizing quality scores of 2-D embeddings of studied datasets. 
   - `./code/params.py`: defines main parameters employed by many scripts in `./code`. 
   - `./code/paths.py`: defines paths of data files and where to save results. 
-  - `./code/tasic-compute-embeddings.py`: computes 2-D embeddings of preprocessed Tasic et al. data, and evaluates their quality. Runtimes are also estimated and embeddings are computed using several hyper-parameter values. 
+  - `./code/tasic-compute-embeddings.py`: computes 2-D embeddings of preprocessed Tasic et al. data, and evaluates their quality. Runtimes can also be estimated (in this case, the original Tasic et al data must be downloaded as detailed below and preprocessed by running tasic-preprocess.py) and embeddings are computed using several hyper-parameter values. 
   - `./code/tasic-figure.py`: produces a figure with 2-D embeddings of preprocessed Tasic et al. data. The embeddings must have been computed using `./code/tasic-compute-embeddings.py` beforehand. 
   - `./code/tasic-preprocess.py`: preprocesses Tasic et al. data. Raw data must have been downloaded beforehand. 
   - `./code/turtles.ipynb`: applies PCA on the turtles dataset from [(Jolicoeur and Mosimann, Growth 1960)](https://www.researchgate.net/profile/Alessandro-Giuliani-2/post/How-to-create-an-index-using-principal-component-analysis-PCA/attachment/61c86da9d248c650edbba126/AS%3A1105257056743426%401640525225582/download/sizeshapeold.pdf). The first two principal components are displayed. 
-  - `./code/wikipedia-compute-embeddings.py`: computes 2-D embeddings of [Simple English Wikipedia data](https://huggingface.co/datasets/Cohere/wikipedia-22-12-simple-embeddings), and evaluates their quality. Data are downloaded if needed. 
+  - `./code/wikipedia-compute-embeddings.py`: computes 2-D embeddings of [Simple English Wikipedia data](https://huggingface.co/datasets/Cohere/wikipedia-22-12-simple-embeddings), and evaluates their quality. Data are downloaded if needed. Runtimes of the embedding methods are also estimated.
   - `./code/utils`: contains a style file and functions used by scripts in `./code`. 
   - `./code/conda_virtual_env/low-dim_embs.yml`: specifies package versions that we employed. Run
   ```
@@ -32,9 +32,9 @@ This repository is structured as follows:
   ```
   to create a `low-dim_embs` conda virtual environment with these package versions. Then, run
   ```
-  pip install --user phate==1.0.11
+  pip install --user phate
   ```
-  to install the version of the `phate` package that we used. 
+  to install the `phate` package (we used version 1.0.11). 
 - `./data`: contains all data files.
   - `./data/citations.csv`: data used by `./code/citations.ipynb`.
   - `./data/1000-Genomes-Project`: contains preprocessed 1000 Genomes Project data and metadata used by `./code/genomes-compute-embeddings.py` and `./code/genomes-figure.py`.

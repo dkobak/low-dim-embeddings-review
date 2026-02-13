@@ -5,21 +5,24 @@
 ########################################################################################################
 
 # Running embedding methods on Kanton et al data, and evaluate their quality.
-# Runtimes are also estimated and embeddings are computed using several hyper-parameter values. 
+# Runtimes can also be estimated (in this case, the original Kanton et al data must be downloaded as detailed in the README and preprocessed by running kanton-preprocess.py) and embeddings are computed using several hyper-parameter values. 
 
 ########################################################################################################
 ########################################################################################################
 
-import numpy as np, utils.run_embs as run_embs, paths
+import numpy as np, utils.run_embs as run_embs, paths, os
 
 # Name of this file
 module_name = "kanton-compute-embeddings.py"
 
-# Set to True to compute the proportion of preserved variance by the first 50 PCs
+# Set to True to compute the proportion of preserved variance by the first 50 PCs. In this case, the original Kanton et al data must be downloaded as detailed in the README and preprocessed by running kanton-preprocess.py
 compute_pca_preserved_var = False
 
 # Set to True to check whether there are duplicated samples in the data set
 check_duplicates = False
+
+# Set to True to estimate runtimes of the embedding methods. In this case, the original Kanton et al data must be downloaded as detailed in the README and preprocessed by running kanton-preprocess.py
+estimate_runtime = True
 
 ##############################
 ############################## 
@@ -33,13 +36,21 @@ check_duplicates = False
 
 print('Loading {v} data'.format(v=paths.kanton_name))
 X_hd = np.load('{p}human-409b2/preprocessed-data.npy'.format(p=paths.kanton_data))
-X_hd_nopca = np.load('{p}human-409b2/gene-selected-data.npy'.format(p=paths.kanton_data)) if compute_pca_preserved_var else None
+if compute_pca_preserved_var or estimate_runtime:
+    path_no_pca = '{p}human-409b2/gene-selected-data.npy'.format(p=paths.kanton_data)
+    if not os.path.exists(path_no_pca):
+        print("Error: if compute_pca_preserved_var or estimate_runtime is True, then the original Kanton et al data must be downloaded as detailed in the README and preprocessed by running kanton-preprocess.py")
+        raise FileNotFoundError("Missing file {v}".format(v=path_no_pca))
+    X_hd_nopca = np.load(path_no_pca)
+else:
+    X_hd_nopca = None
 
 # Computing embeddings
 run_embs.compute_embs_and_quality(X_hd=X_hd, pca_preproc=True, data_name=paths.kanton_name, res_path_emb=paths.kanton_emb, res_path_qa=paths.kanton_qa, check_duplicates=check_duplicates, compute_pca_preserved_var=compute_pca_preserved_var, X_hd_nopca=X_hd_nopca, genomes=False)
 
 # Estimating runtimes of embedding computation
-run_embs.compute_runtimes(X_hd=X_hd, pca_preproc=True, data_name=paths.kanton_name, res_path_emb=paths.kanton_emb, X_hd_nopca=X_hd_nopca, check_duplicates=check_duplicates, genomes=False)
+if estimate_runtime:
+    run_embs.compute_runtimes(X_hd=X_hd, pca_preproc=True, data_name=paths.kanton_name, res_path_emb=paths.kanton_emb, X_hd_nopca=X_hd_nopca, check_duplicates=check_duplicates, genomes=False)
 
 # Computing embeddings for several hyper-parameter values
 run_embs.compute_embs_quality_sev_hps(X_hd=X_hd, pca_preproc=True, data_name=paths.kanton_name, res_path_emb=paths.kanton_emb, res_path_qa=paths.kanton_qa, check_duplicates=check_duplicates, genomes=False)
