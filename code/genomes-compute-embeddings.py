@@ -31,7 +31,7 @@ check_duplicates = False
 
 print('Loading {v} data'.format(v=paths.genomes_name))
 X_hd = np.loadtxt('{p}gt_sum_thinned.npy.gz'.format(p=paths.genomes_data))
-X_hd_nopca = copy.deepcopy(X_hd) if compute_pca_preserved_var else None
+X_hd_nopca = X_hd
 
 # Computing embeddings
 run_embs.compute_embs_and_quality(X_hd=X_hd, pca_preproc=False, data_name=paths.genomes_name, res_path_emb=paths.genomes_emb, res_path_qa=paths.genomes_qa, check_duplicates=check_duplicates, compute_pca_preserved_var=compute_pca_preserved_var, X_hd_nopca=X_hd_nopca, genomes=True)
