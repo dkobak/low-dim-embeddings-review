@@ -34,7 +34,19 @@ This repository is structured as follows:
   ```
   pip install --user phate
   ```
-  to install the `phate` package (we used version 1.0.11). 
+  to install the `phate` package (we used version 1.0.11). As detailed [here](https://opentsne.readthedocs.io/en/latest/installation.html), openTSNE can be easily installed from conda-forge with
+  ```
+  conda install --channel conda-forge opentsne
+  ```
+  Note that openTSNE requires a C/C++ compiler to be available on the system, and that numpy must be pre-installed in the active environment. The `colormaps` package can be installed by running
+  ```
+  pip install colormaps
+  ```
+  We used version 0.4.2. The `opinionated` package can be installed by running
+  ```
+  pip install opinionated
+  ```
+  We used version 0.0.3.0. 
 - `./data`: contains all data files.
   - `./data/citations.csv`: data used by `./code/citations.ipynb`.
   - `./data/1000-Genomes-Project`: contains preprocessed 1000 Genomes Project data and metadata used by `./code/genomes-compute-embeddings.py` and `./code/genomes-figure.py`.
