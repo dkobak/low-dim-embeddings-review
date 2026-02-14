@@ -53,7 +53,7 @@ if estimate_runtime:
     run_embs.compute_runtimes(X_hd=X_hd, pca_preproc=True, data_name=paths.tasic_name, res_path_emb=paths.tasic_emb, X_hd_nopca=X_hd_nopca, check_duplicates=check_duplicates, genomes=False)
 
 # Computing embeddings for several hyper-parameter values
-# run_embs.compute_embs_quality_sev_hps(X_hd=X_hd, pca_preproc=True, data_name=paths.tasic_name, res_path_emb=paths.tasic_emb, res_path_qa=paths.tasic_qa, check_duplicates=check_duplicates, genomes=False)
+run_embs.compute_embs_quality_sev_hps(X_hd=X_hd, pca_preproc=True, data_name=paths.tasic_name, res_path_emb=paths.tasic_emb, res_path_qa=paths.tasic_qa, check_duplicates=check_duplicates, genomes=False)
 
 print('*********************')
 print('***** Done! :-) *****')

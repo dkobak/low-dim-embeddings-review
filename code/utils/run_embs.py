@@ -414,7 +414,7 @@ def compute_embs_quality_sev_hps(X_hd, pca_preproc, data_name, res_path_emb, res
     ##############################
     # Applying MDS
     ####################
-    apply_meth(X_hd=X_hd, meth_name=paths.mds_name, meth_name4path=paths.mds_sklearn_path if genomes else paths.mds_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb, res_path_qa=res_path_qa, dim_LDS=dim_LDS, nn_hd=nn_hd, dm_hd=dm_hd)
+    X_ld_mds, nn_hd, dm_hd = apply_meth(X_hd=X_hd, meth_name=paths.mds_name, meth_name4path=paths.mds_sklearn_path if genomes else paths.mds_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb, res_path_qa=res_path_qa, dim_LDS=dim_LDS, nn_hd=nn_hd, dm_hd=dm_hd)
     
     ###
     ###
@@ -448,25 +448,25 @@ def compute_embs_quality_sev_hps(X_hd, pca_preproc, data_name, res_path_emb, res
         ############################## 
         # Applying Laplacian eigenmaps (LE)
         ####################
-        apply_meth(X_hd=X_hd, meth_name=cur_LE_name, meth_name4path=cur_LE_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_LE=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
+        X_ld_LE, nn_hd, dm_hd = apply_meth(X_hd=X_hd, meth_name=cur_LE_name, meth_name4path=cur_LE_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_LE=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
         
         ##############################
         ############################## 
         # Applying t-SNE
         ####################
-        apply_meth(X_hd=X_hd, meth_name=cur_tsne_name, meth_name4path=cur_tsne_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, perp_tsne=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
+        X_ld_tsne, nn_hd, dm_hd = apply_meth(X_hd=X_hd, meth_name=cur_tsne_name, meth_name4path=cur_tsne_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, perp_tsne=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
         
         ##############################
         ############################## 
         # Applying UMAP
         ####################
-        apply_meth(X_hd=X_hd, meth_name=cur_umap_name, meth_name4path=cur_umap_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_umap=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
+        X_ld_umap, nn_hd, dm_hd = apply_meth(X_hd=X_hd, meth_name=cur_umap_name, meth_name4path=cur_umap_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_umap=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
         
         ##############################
         ############################## 
         # Applying PHATE
         ####################
-        apply_meth(X_hd=X_hd, meth_name=cur_phate_name, meth_name4path=cur_phate_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_phate=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
+        X_ld_phate, nn_hd, dm_hd = apply_meth(X_hd=X_hd, meth_name=cur_phate_name, meth_name4path=cur_phate_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_phate=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
 
 def display_timings(L_meth_timings, data_name):
     """
