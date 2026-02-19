@@ -34,13 +34,13 @@ nn_umap = 15
 nn_phate = 5
 
 # List of number of neighbors and perplexity values considered to illustrate the influence of these hyper-parameters on LE, t-SNE, UMAP and PHATE.
-L_nn_perp = [3, 5, 7, 10, 15, 20, 30, 50, 75, 100, 200, 500, 1000, 1500, 2000]
+L_nn_perp = [3, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 75, 80, 90, 100, 125, 150, 175, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000]#, 2500]#, 3000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000, 20000]
 
 # Format to save the figures
 f_format = 'png'
 
 # Number of runs of a given embedding method that are conducted on a given data set to estimate its average computation time. 
-n_runs_meth_timing = 5
+n_runs_meth_timing = 30
 
 # Number of processors to use when running parallel jobs (not used when estimating runtimes)
-n_jobs = 8
+n_jobs = 9
