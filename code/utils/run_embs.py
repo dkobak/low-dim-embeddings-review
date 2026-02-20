@@ -468,6 +468,88 @@ def compute_embs_quality_sev_hps(X_hd, pca_preproc, data_name, res_path_emb, res
         ####################
         X_ld_phate, nn_hd, dm_hd = apply_meth(X_hd=X_hd, meth_name=cur_phate_name, meth_name4path=cur_phate_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_phate=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
 
+def compute_embs_quality_subsamplings(X_hd, pca_preproc, data_name, res_path_emb, genomes=False):
+    """
+    Apply PCA, MDS, Laplacian Eigenmaps, t-SNE, UMAP and PHATE on subsamplings of a data set. Quality scores of the obtained embeddings are not computed. 
+    In:
+    - X_hd, pca_preproc, res_path_emb: same as in apply_meth. 
+    - data_name: a string storing the name of the data to be embedded. 
+    - genomes: boolean. Set to True if 1000 Genomes data are employed. In this case, MDS implementation from scikit-learn is employed because this data set contains much less examples. It is then not necessary to use a fast implementation such as SQuadMDS. 
+    Out: /
+    """
+    print('===')
+    print("=== Processing subsamplings of {v} data".format(v=data_name))
+    print("===")
+    
+    n_samples = X_hd.shape[0]
+    n_features = X_hd.shape[1]
+    
+    print('Number of samples:  ', n_samples)
+    print('Number of features: ', n_features)
+    
+    # Storing results for the subsamplings in a subfolder
+    res_path_emb_subs = '{v}subs/'.format(v=res_path_emb)
+    
+    ###
+    ###
+    ###
+    # Targeted dimension of the LD embedding
+    dim_LDS = params.dim_LDS
+    # Random seed. 
+    seed = params.seed
+    # Random state to generate the subsamplings
+    rand_state = np.random.RandomState(7)
+    # Proportions of the full data set that are considered as subsamplings
+    proportions = np.arange(start=0.05, step=0.05, stop=1.01, dtype=np.float64)
+    
+    # Looping over proportions
+    for ip, prop in enumerate(proportions):
+        
+        print('**')
+        print("** Considered proportion of full data set: {v} (#{ip}/{n_tot})".format(v=prop, ip=ip+1, n_tot=proportions.size))
+        print("**")
+        
+        id_subs = rand_state.choice(a=n_samples, size=int(round(prop*n_samples)), replace=False)
+        
+        # Storing results in a subfolder
+        res_path_emb_subs_p = '{v}{p}/'.format(v=res_path_emb_subs, p=int(round(prop*100)))
+        
+        ##############################
+        ############################## 
+        # Applying PCA
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=paths.pca_name, meth_name4path=paths.pca_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, skip_qa=True)
+        
+        ##############################
+        ##############################
+        # Applying MDS
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=paths.mds_name, meth_name4path=paths.mds_sklearn_path if genomes else paths.mds_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_hd=None, dm_hd=None, skip_qa=True)
+        
+        ##############################
+        ############################## 
+        # Applying Laplacian eigenmaps (LE)
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=paths.LE_name, meth_name4path=paths.LE_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_LE=params.nn_LE, nn_hd=None, dm_hd=None, skip_qa=True)
+        
+        ##############################
+        ############################## 
+        # Applying t-SNE
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=paths.tsne_name, meth_name4path=paths.tsne_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, perp_tsne=params.perp_tsne, nn_hd=None, dm_hd=None, skip_qa=True)
+        
+        ##############################
+        ############################## 
+        # Applying UMAP
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=paths.umap_name, meth_name4path=paths.umap_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_umap=params.nn_umap, nn_hd=None, dm_hd=None, skip_qa=True)
+        
+        ##############################
+        ############################## 
+        # Applying PHATE
+        ####################
+        apply_meth(X_hd=X_hd, meth_name=paths.phate_name, meth_name4path=paths.phate_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_phate=params.nn_phate, nn_hd=None, dm_hd=None, skip_qa=True)
+
 def display_timings(L_meth_timings, data_name):
     """
     Displays the estimated runtimes of several methods on some data set. 

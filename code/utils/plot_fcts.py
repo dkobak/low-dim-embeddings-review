@@ -19,6 +19,7 @@ module_name = "plot_fcts.py"
 plt.rcParams['text.usetex'] = False
 plt.style.use('./utils/mpl_style.txt') 
 
+#import opinionated
 #plt.style.use("opinionated_rc")
 
 ##############################

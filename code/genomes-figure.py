@@ -11,7 +11,7 @@
 ########################################################################################################
 ########################################################################################################
 
-import numpy as np, utils.plot_fcts as plot_fcts, paths, params, pandas as pd
+import numpy as np, utils.plot_fcts as plot_fcts, paths, params, pandas as pd, plot_qa_hp
 
 # Name of this file
 module_name = "genomes-figure.py"
@@ -59,6 +59,8 @@ D_viz_emb['D_pop'] = D_pop_arr
 D_viz_emb['D_superpop'] = D_superpop_arr
 
 plot_fcts.create_2x3_figure(data_name=paths.genomes_name, emb_path=paths.genomes_emb, fig_path=paths.genomes_fig, arr_colors=labels, f_format=params.f_format, D_viz_emb=D_viz_emb)
+
+plot_qa_hp.plot_sev_hps(data_name=paths.genomes_name, res_path_qa=paths.genomes_qa, genomes=True, fig_path=paths.genomes_fig)
 
 print('*********************')
 print('***** Done! :-) *****')

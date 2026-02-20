@@ -9,7 +9,7 @@
 ########################################################################################################
 ########################################################################################################
 
-import numpy as np, utils.plot_fcts as plot_fcts, paths, params, pandas as pd
+import numpy as np, utils.plot_fcts as plot_fcts, paths, params, pandas as pd, plot_qa_hp
 
 # Name of this file
 module_name = "tasic-figure.py"
@@ -37,6 +37,8 @@ D_viz_emb['clusterColors'] = clusterColors
 D_viz_emb['clusterNames'] = clusterNames
 
 plot_fcts.create_2x3_figure(data_name=paths.tasic_name, emb_path=paths.tasic_emb, fig_path=paths.tasic_fig, arr_colors=colors, f_format=params.f_format, X_PCs=X_PCs, D_viz_emb=D_viz_emb)
+
+plot_qa_hp.plot_sev_hps(data_name=paths.tasic_name, res_path_qa=paths.tasic_qa, genomes=False, fig_path=paths.tasic_fig)
 
 print('*********************')
 print('***** Done! :-) *****')
