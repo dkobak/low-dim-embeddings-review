@@ -5,7 +5,7 @@
 ########################################################################################################
 
 # Computing LD embeddings of Simple English Wikipedia data, and assessing their quality.
-# Runtimes of the embedding methods are also estimated.
+# Runtimes of the embedding methods are also estimated. Embeddings of subsamplings of this data set can also be computed. 
 
 ########################################################################################################
 ########################################################################################################
@@ -28,6 +28,9 @@ n_landmarks = 1000
 
 # Number of runs with different sets of landmarks. Results can then be averaged over the runs and standard deviations can be estimated. 
 n_runs = 1
+
+# Set to True to compute embeddings of subsamplings of this data set
+compute_subsamplings = True
 
 ##############################
 ############################## 
@@ -62,6 +65,10 @@ for name, npath in L_names:
     L_X_LD.append(run_embs.apply_meth(X_hd=X_hd, meth_name=name, meth_name4path=npath, pca_preproc=False, compute_dist_HD=None, compute_dist_LD_qa=None, seed=params.seed, res_path_emb=paths.wiki_emb, res_path_qa=None, dim_LDS=params.dim_LDS, perp_tsne=params.perp_tsne, nn_umap=params.nn_umap, nn_phate=params.nn_phate, nn_LE=params.nn_LE, skip_qa=True))
 print("===")
 n_embs = len(L_X_LD)
+
+# Computing embeddings of subsamplings of this data set
+if compute_subsamplings:
+    run_embs.compute_embs_quality_subsamplings(X_hd=X_hd, pca_preproc=False, data_name=paths.wiki_name, res_path_emb=paths.wiki_emb, genomes=False)
 
 # Dictionary with one entry per type of quality score. Each entry contains a list with as many elements as LD embeddings in L_X_LD. Each element of each list is a np.array with n_runs elements. 
 D_L_score_meths = {}

@@ -11,7 +11,7 @@
 ########################################################################################################
 ########################################################################################################
 
-import numpy as np, utils.plot_fcts as plot_fcts, paths, params
+import numpy as np, utils.plot_fcts as plot_fcts, paths, params, plot_qa_hp
 
 # Name of this file
 module_name = "kanton-figure.py"
@@ -67,6 +67,8 @@ for k in D_samp_by_time:
         D_samp_by_time_arr[k] = np.asarray(D_samp_by_time[k], dtype=np.int64)
 
 plot_fcts.create_2x3_figure(data_name=paths.kanton_name, emb_path=paths.kanton_emb, fig_path=paths.kanton_fig, arr_colors=labels, f_format=params.f_format, X_PCs=X_PCs, D_viz_emb={'D_samp_by_time':D_samp_by_time_arr})
+
+plot_qa_hp.plot_sev_hps(data_name=paths.kanton_name, res_path_qa=paths.kanton_qa, genomes=False, fig_path=paths.kanton_fig)
 
 print('*********************')
 print('***** Done! :-) *****')

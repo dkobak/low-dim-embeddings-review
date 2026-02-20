@@ -5,7 +5,7 @@
 ########################################################################################################
 
 # Running embedding methods on Tasic et al data, and evaluate their quality. 
-# Runtimes can also be estimated (in this case, the original Tasic et al data must be downloaded as detailed in the README and preprocessed by running tasic-preprocess.py) and embeddings are computed using several hyper-parameter values. 
+# Runtimes can also be estimated (in this case, the original Tasic et al data must be downloaded as detailed in the README and preprocessed by running tasic-preprocess.py) and embeddings are computed using several hyper-parameter values. Embeddings of subsamplings of this data set can also be computed. 
 
 ########################################################################################################
 ########################################################################################################
@@ -23,6 +23,9 @@ check_duplicates = False
 
 # Set to True to estimate runtimes of the embedding methods. In this case, the original Tasic et al data must be downloaded as detailed in the README and preprocessed by running tasic-preprocess.py
 estimate_runtime = True
+
+# Set to True to compute embeddings of subsamplings of this data set
+compute_subsamplings = True
 
 ##############################
 ############################## 
@@ -54,6 +57,10 @@ if estimate_runtime:
 
 # Computing embeddings for several hyper-parameter values
 run_embs.compute_embs_quality_sev_hps(X_hd=X_hd, pca_preproc=True, data_name=paths.tasic_name, res_path_emb=paths.tasic_emb, res_path_qa=paths.tasic_qa, check_duplicates=check_duplicates, genomes=False)
+
+# Computing embeddings of subsamplings of this data set
+if compute_subsamplings:
+    run_embs.compute_embs_quality_subsamplings(X_hd=X_hd, pca_preproc=True, data_name=paths.tasic_name, res_path_emb=paths.tasic_emb, genomes=False)
 
 print('*********************')
 print('***** Done! :-) *****')
