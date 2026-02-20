@@ -9,6 +9,8 @@
 ########################################################################################################
 ########################################################################################################
 
+import numpy as np
+
 # Name of this file
 module_name = "params.py"
 
@@ -43,4 +45,7 @@ f_format = 'png'
 n_runs_meth_timing = 30
 
 # Number of processors to use when running parallel jobs (not used when estimating runtimes)
-n_jobs = 9
+n_jobs = 7
+
+# Proportions of the full data set that are considered as subsamplings
+proportions = np.arange(start=0.05, step=0.05, stop=1.01, dtype=np.float64)
