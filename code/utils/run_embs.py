@@ -468,11 +468,11 @@ def compute_embs_quality_sev_hps(X_hd, pca_preproc, data_name, res_path_emb, res
         ####################
         X_ld_phate, nn_hd, dm_hd = apply_meth(X_hd=X_hd, meth_name=cur_phate_name, meth_name4path=cur_phate_path, pca_preproc=pca_preproc, compute_dist_HD=compute_dist_HD, compute_dist_LD_qa=compute_dist_LD_qa, seed=seed, res_path_emb=res_path_emb_hps, res_path_qa=res_path_qa_hps, dim_LDS=dim_LDS, nn_phate=nnp, nn_hd=nn_hd, dm_hd=dm_hd)
 
-def compute_embs_quality_subsamplings(X_hd, pca_preproc, data_name, res_path_emb, genomes=False):
+def compute_embs_quality_subsamplings(X_hd, pca_preproc, data_name, res_path_emb, genomes=False, X_hd_nopca=None):
     """
     Apply PCA, MDS, Laplacian Eigenmaps, t-SNE, UMAP and PHATE on subsamplings of a data set. Quality scores of the obtained embeddings are not computed. 
     In:
-    - X_hd, pca_preproc, res_path_emb: same as in apply_meth. 
+    - X_hd, pca_preproc, res_path_emb, X_hd_nopca: same as in apply_meth and compute_embs_and_quality. 
     - data_name: a string storing the name of the data to be embedded. 
     - genomes: boolean. Set to True if 1000 Genomes data are employed. In this case, MDS implementation from scikit-learn is employed because this data set contains much less examples. It is then not necessary to use a fast implementation such as SQuadMDS. 
     Out: /
@@ -518,7 +518,7 @@ def compute_embs_quality_subsamplings(X_hd, pca_preproc, data_name, res_path_emb
         ############################## 
         # Applying PCA
         ####################
-        apply_meth(X_hd=X_hd, meth_name=paths.pca_name, meth_name4path=paths.pca_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, skip_qa=True)
+        apply_meth(X_hd=X_hd_nopca if pca_preproc else X_hd, meth_name=paths.pca_name, meth_name4path=paths.pca_path, pca_preproc=False, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, skip_qa=True)
         
         ##############################
         ##############################

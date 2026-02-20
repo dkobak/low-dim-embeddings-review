@@ -68,7 +68,7 @@ n_embs = len(L_X_LD)
 
 # Computing embeddings of subsamplings of this data set
 if compute_subsamplings:
-    run_embs.compute_embs_quality_subsamplings(X_hd=X_hd, pca_preproc=False, data_name=paths.wiki_name, res_path_emb=paths.wiki_emb, genomes=False)
+    run_embs.compute_embs_quality_subsamplings(X_hd=X_hd, pca_preproc=False, data_name=paths.wiki_name, res_path_emb=paths.wiki_emb, genomes=False, X_hd_nopca=X_hd)
 
 # Dictionary with one entry per type of quality score. Each entry contains a list with as many elements as LD embeddings in L_X_LD. Each element of each list is a np.array with n_runs elements. 
 D_L_score_meths = {}
