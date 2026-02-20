@@ -500,7 +500,7 @@ def compute_embs_quality_subsamplings(X_hd, pca_preproc, data_name, res_path_emb
     # Random state to generate the subsamplings
     rand_state = np.random.RandomState(7)
     # Proportions of the full data set that are considered as subsamplings
-    proportions = np.arange(start=0.05, step=0.05, stop=1.01, dtype=np.float64)
+    proportions = params.proportions
     
     # Looping over proportions
     for ip, prop in enumerate(proportions):
