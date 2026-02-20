@@ -39,7 +39,7 @@ compute_subsamplings = True
 
 print('Loading {v} data'.format(v=paths.kanton_name))
 X_hd = np.load('{p}human-409b2/preprocessed-data.npy'.format(p=paths.kanton_data))
-if compute_pca_preserved_var or estimate_runtime:
+if compute_pca_preserved_var or estimate_runtime or compute_subsamplings:
     path_no_pca = '{p}human-409b2/gene-selected-data.npy'.format(p=paths.kanton_data)
     if not os.path.exists(path_no_pca):
         print("Error: if compute_pca_preserved_var or estimate_runtime is True, then the original Kanton et al data must be downloaded as detailed in the README and preprocessed by running kanton-preprocess.py")
@@ -60,7 +60,7 @@ run_embs.compute_embs_quality_sev_hps(X_hd=X_hd, pca_preproc=True, data_name=pat
 
 # Computing embeddings of subsamplings of this data set
 if compute_subsamplings:
-    run_embs.compute_embs_quality_subsamplings(X_hd=X_hd, pca_preproc=True, data_name=paths.kanton_name, res_path_emb=paths.kanton_emb, genomes=False)
+    run_embs.compute_embs_quality_subsamplings(X_hd=X_hd, pca_preproc=True, data_name=paths.kanton_name, res_path_emb=paths.kanton_emb, genomes=False, X_hd_nopca=X_hd_nopca)
 
 print('*********************')
 print('***** Done! :-) *****')
