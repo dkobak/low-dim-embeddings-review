@@ -4,7 +4,7 @@
 ########################################################################################################
 ########################################################################################################
 
-# Create figure depicting 2x3 embeddings of 1000 Genomes Project data.
+# Create figure depicting 2x3 embeddings of 1000 Genomes Project data. It is also possible to create figures illustrating the influence of the hyper-parameters of the embedding methods.
 
 # This file contains elements of code written by Alex Diaz-Papkovich.
 
@@ -15,6 +15,9 @@ import numpy as np, utils.plot_fcts as plot_fcts, paths, params, pandas as pd, p
 
 # Name of this file
 module_name = "genomes-figure.py"
+
+# Set to True to create figures illustrating the influence of the hyper-parameters of the embedding methods
+plot_res_hps = True
 
 ##############################
 ############################## 
@@ -60,7 +63,9 @@ D_viz_emb['D_superpop'] = D_superpop_arr
 
 plot_fcts.create_2x3_figure(data_name=paths.genomes_name, emb_path=paths.genomes_emb, fig_path=paths.genomes_fig, arr_colors=labels, f_format=params.f_format, D_viz_emb=D_viz_emb)
 
-plot_qa_hp.plot_sev_hps(data_name=paths.genomes_name, res_path_qa=paths.genomes_qa, genomes=True, fig_path=paths.genomes_fig)
+if plot_res_hps:
+    plot_qa_hp.plot_sev_hps(data_name=paths.genomes_name, res_path_qa=paths.genomes_qa, genomes=True, fig_path=paths.genomes_fig)
+    plot_fcts.create_2x3_figures_hps(data_name=paths.genomes_name, emb_path=paths.genomes_emb, fig_path=paths.genomes_fig, arr_colors=labels, f_format=params.f_format, D_viz_emb=D_viz_emb)
 
 print('*********************')
 print('***** Done! :-) *****')
