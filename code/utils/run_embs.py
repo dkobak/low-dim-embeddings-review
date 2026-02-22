@@ -419,7 +419,7 @@ def compute_embs_quality_sev_hps(X_hd, pca_preproc, data_name, res_path_emb, res
     ###
     ###
     ###
-    # Storing results for multiple hyper-parameters values in subfolders
+    # Storing results for multiple hyper-parameter values in subfolders
     res_path_emb_hps = "{v}hps/".format(v=res_path_emb)
     res_path_qa_hps = "{v}hps/".format(v=res_path_qa)
     

@@ -4,7 +4,7 @@
 ########################################################################################################
 ########################################################################################################
 
-# Create figure depicting 2x3 embeddings of Tasic et al data.
+# Create figure depicting 2x3 embeddings of Tasic et al data. It is also possible to create figures illustrating the influence of the hyper-parameters of the embedding methods.
 
 ########################################################################################################
 ########################################################################################################
@@ -13,6 +13,9 @@ import numpy as np, utils.plot_fcts as plot_fcts, paths, params, pandas as pd, p
 
 # Name of this file
 module_name = "tasic-figure.py"
+
+# Set to True to create figures illustrating the influence of the hyper-parameters of the embedding methods
+plot_res_hps = True
 
 ##############################
 ############################## 
@@ -38,7 +41,9 @@ D_viz_emb['clusterNames'] = clusterNames
 
 plot_fcts.create_2x3_figure(data_name=paths.tasic_name, emb_path=paths.tasic_emb, fig_path=paths.tasic_fig, arr_colors=colors, f_format=params.f_format, X_PCs=X_PCs, D_viz_emb=D_viz_emb)
 
-plot_qa_hp.plot_sev_hps(data_name=paths.tasic_name, res_path_qa=paths.tasic_qa, genomes=False, fig_path=paths.tasic_fig)
+if plot_res_hps:
+    plot_qa_hp.plot_sev_hps(data_name=paths.tasic_name, res_path_qa=paths.tasic_qa, genomes=False, fig_path=paths.tasic_fig)
+    plot_fcts.create_2x3_figures_hps(data_name=paths.tasic_name, emb_path=paths.tasic_emb, fig_path=paths.tasic_fig, arr_colors=colors, f_format=params.f_format, X_PCs=X_PCs, D_viz_emb=D_viz_emb)
 
 print('*********************')
 print('***** Done! :-) *****')
