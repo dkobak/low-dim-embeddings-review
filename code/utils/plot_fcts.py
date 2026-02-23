@@ -868,4 +868,194 @@ def create_2x3_figures_hps(data_name, emb_path, fig_path, arr_colors, f_format='
         save_show_fig(fname="{v}_hps/nnp_{n}".format(v=fig_path, n=int(round(nnp))), f_format=f_format)
         plt.close()
 
+def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format='png', D_viz_emb=None):
+    """
+    Create figures with 2 x 3 subplots, depicting the results of 6 embedding methods applied on subsamplings of a data set. 
+    The embedding methods that are considered are PCA, MDS, Laplacian eigenmaps, PHATE, t-SNE and UMAP. 
+    It is assumed that 2-D embeddings of the data were previously computed and saved.
+    In:
+    - data_name: name of the currently considered data set in prints, as specified in the paths.py file. 
+    - emb_path: path where the embeddings of the data are stored. 
+    - fig_path: path where to save the figure. 
+    - arr_colors: an array or list with one entry per example, specifying the color to use to plot it in 2-D. 
+    - f_format: format of the figure to be saved. 
+    - D_viz_emb: same as in viz_2d_emb.
+    Out: figures are produced and saved. 
+    """
+    print('===')
+    print("=== Creating 2x3 figures for subsamplings of {v} data".format(v=data_name))
+    print("===")
+    
+    # Results are stored in subfolders
+    res_path_emb_subs = "{v}subs/".format(v=emb_path)
+    
+    # Looping over proportions
+    for ip, prop in enumerate(params.proportions):
+        print('**')
+        print("** Considered proportion of full data set: {v} (#{ip}/{n_tot})".format(v=prop, ip=ip+1, n_tot=params.proportions.size))
+        print("**")
+        
+        
+        
+        
+        
+        
+        cur_LE_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.LE_name_no_param)
+        cur_LE_path = '{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param)
+        
+        cur_tsne_name = '{v} (perplexity: {p})'.format(p=nnp, v=paths.tsne_name_no_param)
+        cur_tsne_path = '{v}-p{p}'.format(v=paths.tsne_path_no_param, p=int(round(nnp)))
+        
+        cur_umap_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.umap_name_no_param)
+        cur_umap_path = '{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param)
+        
+        cur_phate_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.phate_name_no_param)
+        cur_phate_path = '{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param)
+        
+        fig = plt.figure(figsize=(7, 3.5))
+        gs = GridSpec(nrows=2, ncols=3, wspace=0.0, figure=fig)
+        
+        ##############################
+        ############################## 
+        # PCA
+        ####################
+        
+        if (data_name == paths.tasic_name) or (data_name == paths.kanton_name):
+            X_pca = copy.deepcopy(X_PCs)
+        else:
+            X_pca = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=paths.pca_path))
+        
+        if data_name == paths.tasic_name:
+            flipx = True
+            flipy = True
+        elif data_name == paths.genomes_name:
+            flipx = False
+            flipy = False
+        elif data_name == paths.kanton_name:
+            flipx = False
+            flipy = False
+        else:
+            flipx = False
+            flipy = False
+        
+        viz_2d_emb(X=X_pca, vcol=arr_colors, tit=paths.pca_name, ax_def=gs[0,0], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, pca_tasic=False, pca_genomes=False, D_viz_emb=D_viz_emb)
+        
+        ##############################
+        ############################## 
+        # MDS
+        ####################
+        
+        X_mds = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=paths.mds_sklearn_path if data_name == paths.genomes_name else paths.mds_path))
+        
+        if data_name == paths.tasic_name:
+            flipx = True
+            flipy = True
+        elif data_name == paths.genomes_name:
+            flipx = False
+            flipy = False
+        elif data_name == paths.kanton_name:
+            flipx = False
+            flipy = False
+        else:
+            flipx = False
+            flipy = False
+        
+        viz_2d_emb(X=X_mds, vcol=arr_colors, tit=paths.mds_name, ax_def=gs[1,0], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name)
+        
+        ##############################
+        ############################## 
+        # Laplacian eigenmaps (LE)
+        ####################
+        
+        X_LE = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=cur_LE_path))
+        
+        if data_name == paths.tasic_name:
+            flipx = False
+            flipy = False
+        elif data_name == paths.genomes_name:
+            flipx = False
+            flipy = False
+        elif data_name == paths.kanton_name:
+            flipx = True
+            flipy = False
+        else:
+            flipx = False
+            flipy = False
+        #tit=paths.LE_name_no_param
+        viz_2d_emb(X=X_LE, vcol=arr_colors, tit="Lapl. Eig.", ax_def=gs[0,1], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, LE_tasic=False, LE_genomes=False, LE_kanton=False, D_viz_emb=D_viz_emb)
+        
+        ##############################
+        ############################## 
+        # PHATE
+        ####################
+        
+        X_phate = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=cur_phate_path))
+        
+        if data_name == paths.tasic_name:
+            flipx = True
+            flipy = False
+        elif data_name == paths.genomes_name:
+            flipx = True
+            flipy = False
+        elif data_name == paths.kanton_name:
+            flipx = False
+            flipy = False
+        else:
+            flipx = False
+            flipy = False
+        
+        viz_2d_emb(X=X_phate, vcol=arr_colors, tit=paths.phate_name_no_param, ax_def=gs[1,1], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, phate_kanton=False, D_viz_emb=D_viz_emb)
+        
+        ##############################
+        ############################## 
+        # t-SNE
+        ####################
+        
+        X_tsne = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=cur_tsne_path))
+        
+        if data_name == paths.tasic_name:
+            flipx = True
+            flipy = True
+        elif data_name == paths.genomes_name:
+            flipx = False
+            flipy = False
+        elif data_name == paths.kanton_name:
+            flipx = False
+            flipy = False
+        else:
+            flipx = False
+            flipy = False
+        
+        viz_2d_emb(X=X_tsne, vcol=arr_colors, tit=r't-SNE', ax_def=gs[0,2], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, tsne_tasic=False, D_viz_emb=D_viz_emb)
+        
+        ##############################
+        ############################## 
+        # UMAP
+        ####################
+        
+        X_umap = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=cur_umap_path))
+        
+        if data_name == paths.tasic_name:
+            flipx = False
+            flipy = True
+        elif data_name == paths.genomes_name:
+            flipx = False
+            flipy = False
+        elif data_name == paths.kanton_name:
+            flipx = True
+            flipy = True
+        else:
+            flipx = False
+            flipy = False
+        
+        viz_2d_emb(X=X_umap, vcol=arr_colors, tit=paths.umap_name_no_param, ax_def=gs[1,2], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, umap_tasic=False, umap_genomes=False, D_viz_emb=D_viz_emb)
+        
+        ##############################
+        ##############################
+        # Creating figure
+        ####################
+        
+        save_show_fig(fname="{v}_hps/nnp_{n}".format(v=fig_path, n=int(round(nnp))), f_format=f_format)
+        plt.close()
+
 
