@@ -895,22 +895,8 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
         print("** Considered proportion of full data set: {v} (#{ip}/{n_tot})".format(v=prop, ip=ip+1, n_tot=params.proportions.size))
         print("**")
         
-        
-        
-        
-        
-        
-        cur_LE_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.LE_name_no_param)
-        cur_LE_path = '{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param)
-        
-        cur_tsne_name = '{v} (perplexity: {p})'.format(p=nnp, v=paths.tsne_name_no_param)
-        cur_tsne_path = '{v}-p{p}'.format(v=paths.tsne_path_no_param, p=int(round(nnp)))
-        
-        cur_umap_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.umap_name_no_param)
-        cur_umap_path = '{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param)
-        
-        cur_phate_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.phate_name_no_param)
-        cur_phate_path = '{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param)
+        # Storing results in a subfolder
+        res_path_emb_subs_p = '{v}{p}/'.format(v=res_path_emb_subs, p=int(round(prop*100)))
         
         fig = plt.figure(figsize=(7, 3.5))
         gs = GridSpec(nrows=2, ncols=3, wspace=0.0, figure=fig)
@@ -920,10 +906,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
         # PCA
         ####################
         
-        if (data_name == paths.tasic_name) or (data_name == paths.kanton_name):
-            X_pca = copy.deepcopy(X_PCs)
-        else:
-            X_pca = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=paths.pca_path))
+        X_pca = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs_p, npath=paths.pca_path))
         
         if data_name == paths.tasic_name:
             flipx = True
@@ -945,7 +928,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
         # MDS
         ####################
         
-        X_mds = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=paths.mds_sklearn_path if data_name == paths.genomes_name else paths.mds_path))
+        X_mds = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs_p, npath=paths.mds_sklearn_path if data_name == paths.genomes_name else paths.mds_path))
         
         if data_name == paths.tasic_name:
             flipx = True
@@ -967,7 +950,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
         # Laplacian eigenmaps (LE)
         ####################
         
-        X_LE = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=cur_LE_path))
+        X_LE = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs_p, npath=paths.LE_path))
         
         if data_name == paths.tasic_name:
             flipx = False
@@ -989,7 +972,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
         # PHATE
         ####################
         
-        X_phate = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=cur_phate_path))
+        X_phate = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs_p, npath=paths.phate_path))
         
         if data_name == paths.tasic_name:
             flipx = True
@@ -1011,7 +994,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
         # t-SNE
         ####################
         
-        X_tsne = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=cur_tsne_path))
+        X_tsne = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs_p, npath=paths.tsne_path))
         
         if data_name == paths.tasic_name:
             flipx = True
@@ -1033,7 +1016,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
         # UMAP
         ####################
         
-        X_umap = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs, npath=cur_umap_path))
+        X_umap = np.load('{rp}{npath}.npy'.format(rp=res_path_emb_subs_p, npath=paths.umap_path))
         
         if data_name == paths.tasic_name:
             flipx = False
@@ -1055,7 +1038,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
         # Creating figure
         ####################
         
-        save_show_fig(fname="{v}_hps/nnp_{n}".format(v=fig_path, n=int(round(nnp))), f_format=f_format)
+        save_show_fig(fname="{v}_subs/prop_{p}".format(v=fig_path, p=int(round(prop*100))), f_format=f_format)
         plt.close()
 
 
