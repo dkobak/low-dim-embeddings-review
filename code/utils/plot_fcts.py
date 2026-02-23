@@ -868,7 +868,7 @@ def create_2x3_figures_hps(data_name, emb_path, fig_path, arr_colors, f_format='
         save_show_fig(fname="{v}_hps/nnp_{n}".format(v=fig_path, n=int(round(nnp))), f_format=f_format)
         plt.close()
 
-def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format='png', D_viz_emb=None):
+def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, n_samples, f_format='png', D_viz_emb=None):
     """
     Create figures with 2 x 3 subplots, depicting the results of 6 embedding methods applied on subsamplings of a data set. 
     The embedding methods that are considered are PCA, MDS, Laplacian eigenmaps, PHATE, t-SNE and UMAP. 
@@ -878,6 +878,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
     - emb_path: path where the embeddings of the data are stored. 
     - fig_path: path where to save the figure. 
     - arr_colors: an array or list with one entry per example, specifying the color to use to plot it in 2-D. 
+    - n_samples: number of samples in the data set.
     - f_format: format of the figure to be saved. 
     - D_viz_emb: same as in viz_2d_emb.
     Out: figures are produced and saved. 
@@ -885,6 +886,9 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
     print('===')
     print("=== Creating 2x3 figures for subsamplings of {v} data".format(v=data_name))
     print("===")
+    
+    # Random state used to generate the subsamplings
+    rand_state = np.random.RandomState(7)
     
     # Results are stored in subfolders
     res_path_emb_subs = "{v}subs/".format(v=emb_path)
@@ -894,6 +898,10 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
         print('**')
         print("** Considered proportion of full data set: {v} (#{ip}/{n_tot})".format(v=prop, ip=ip+1, n_tot=params.proportions.size))
         print("**")
+        
+        id_subs = rand_state.choice(a=n_samples, size=int(round(prop*n_samples)), replace=False)
+        
+        arr_colors_cur = arr_colors[id_subs]
         
         # Storing results in a subfolder
         res_path_emb_subs_p = '{v}{p}/'.format(v=res_path_emb_subs, p=int(round(prop*100)))
@@ -921,7 +929,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
             flipx = False
             flipy = False
         
-        viz_2d_emb(X=X_pca, vcol=arr_colors, tit=paths.pca_name, ax_def=gs[0,0], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, pca_tasic=False, pca_genomes=False, D_viz_emb=D_viz_emb)
+        viz_2d_emb(X=X_pca, vcol=arr_colors_cur, tit=paths.pca_name, ax_def=gs[0,0], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, pca_tasic=False, pca_genomes=False, D_viz_emb=D_viz_emb)
         
         ##############################
         ############################## 
@@ -943,7 +951,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
             flipx = False
             flipy = False
         
-        viz_2d_emb(X=X_mds, vcol=arr_colors, tit=paths.mds_name, ax_def=gs[1,0], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name)
+        viz_2d_emb(X=X_mds, vcol=arr_colors_cur, tit=paths.mds_name, ax_def=gs[1,0], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name)
         
         ##############################
         ############################## 
@@ -965,7 +973,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
             flipx = False
             flipy = False
         #tit=paths.LE_name_no_param
-        viz_2d_emb(X=X_LE, vcol=arr_colors, tit="Lapl. Eig.", ax_def=gs[0,1], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, LE_tasic=False, LE_genomes=False, LE_kanton=False, D_viz_emb=D_viz_emb)
+        viz_2d_emb(X=X_LE, vcol=arr_colors_cur, tit="Lapl. Eig.", ax_def=gs[0,1], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, LE_tasic=False, LE_genomes=False, LE_kanton=False, D_viz_emb=D_viz_emb)
         
         ##############################
         ############################## 
@@ -987,7 +995,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
             flipx = False
             flipy = False
         
-        viz_2d_emb(X=X_phate, vcol=arr_colors, tit=paths.phate_name_no_param, ax_def=gs[1,1], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, phate_kanton=False, D_viz_emb=D_viz_emb)
+        viz_2d_emb(X=X_phate, vcol=arr_colors_cur, tit=paths.phate_name_no_param, ax_def=gs[1,1], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, phate_kanton=False, D_viz_emb=D_viz_emb)
         
         ##############################
         ############################## 
@@ -1009,7 +1017,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
             flipx = False
             flipy = False
         
-        viz_2d_emb(X=X_tsne, vcol=arr_colors, tit=r't-SNE', ax_def=gs[0,2], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, tsne_tasic=False, D_viz_emb=D_viz_emb)
+        viz_2d_emb(X=X_tsne, vcol=arr_colors_cur, tit=r't-SNE', ax_def=gs[0,2], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, tsne_tasic=False, D_viz_emb=D_viz_emb)
         
         ##############################
         ############################## 
@@ -1031,7 +1039,7 @@ def create_2x3_figures_subs(data_name, emb_path, fig_path, arr_colors, f_format=
             flipx = False
             flipy = False
         
-        viz_2d_emb(X=X_umap, vcol=arr_colors, tit=paths.umap_name_no_param, ax_def=gs[1,2], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, umap_tasic=False, umap_genomes=False, D_viz_emb=D_viz_emb)
+        viz_2d_emb(X=X_umap, vcol=arr_colors_cur, tit=paths.umap_name_no_param, ax_def=gs[1,2], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, umap_tasic=False, umap_genomes=False, D_viz_emb=D_viz_emb)
         
         ##############################
         ##############################

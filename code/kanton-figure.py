@@ -79,7 +79,7 @@ if plot_res_hps:
     plot_fcts.create_2x3_figures_hps(data_name=paths.kanton_name, emb_path=paths.kanton_emb, fig_path=paths.kanton_fig, arr_colors=labels, f_format=params.f_format, X_PCs=X_PCs, D_viz_emb={'D_samp_by_time':D_samp_by_time_arr})
 
 if plot_res_subs:
-    plot_fcts.create_2x3_figures_subs(data_name=paths.tasic_name, emb_path=paths.tasic_emb, fig_path=paths.tasic_fig, arr_colors=colors, f_format=params.f_format, D_viz_emb=D_viz_emb)
+    plot_fcts.create_2x3_figures_subs(data_name=paths.kanton_name, emb_path=paths.kanton_emb, fig_path=paths.kanton_fig, arr_colors=labels, n_samples=X_PCs.shape[0], f_format=params.f_format, D_viz_emb={'D_samp_by_time':D_samp_by_time_arr})
 
 print('*********************')
 print('***** Done! :-) *****')
