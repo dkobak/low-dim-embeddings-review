@@ -4,7 +4,7 @@
 ########################################################################################################
 ########################################################################################################
 
-# Create figure depicting 2x3 embeddings of Kanton et al data. It is also possible to create figures illustrating the influence of the hyper-parameters of the embedding methods.
+# Create figure depicting 2x3 embeddings of Kanton et al data. It is also possible to create figures illustrating the influence of the hyper-parameters of the embedding methods, and associated with subsamplings of this data set.
 
 # This file contains elements of code written by Sebastian Damrich and made publicly available following this link: https://github.com/berenslab/ne_spectrum_scRNAseq/blob/main/utils/utils.py#L99
 
@@ -18,6 +18,9 @@ module_name = "kanton-figure.py"
 
 # Set to True to create figures illustrating the influence of the hyper-parameters of the embedding methods
 plot_res_hps = True
+
+# Set to True to create figures associated with subsamplings of this data set.
+plot_res_subs = True
 
 ##############################
 ##############################
@@ -74,6 +77,9 @@ plot_fcts.create_2x3_figure(data_name=paths.kanton_name, emb_path=paths.kanton_e
 if plot_res_hps:
     plot_qa_hp.plot_sev_hps(data_name=paths.kanton_name, res_path_qa=paths.kanton_qa, genomes=False, fig_path=paths.kanton_fig)
     plot_fcts.create_2x3_figures_hps(data_name=paths.kanton_name, emb_path=paths.kanton_emb, fig_path=paths.kanton_fig, arr_colors=labels, f_format=params.f_format, X_PCs=X_PCs, D_viz_emb={'D_samp_by_time':D_samp_by_time_arr})
+
+if plot_res_subs:
+    plot_fcts.create_2x3_figures_subs(data_name=paths.tasic_name, emb_path=paths.tasic_emb, fig_path=paths.tasic_fig, arr_colors=colors, f_format=params.f_format, D_viz_emb=D_viz_emb)
 
 print('*********************')
 print('***** Done! :-) *****')
