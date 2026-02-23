@@ -518,37 +518,37 @@ def compute_embs_quality_subsamplings(X_hd, pca_preproc, data_name, res_path_emb
         ############################## 
         # Applying PCA
         ####################
-        apply_meth(X_hd=X_hd_nopca if pca_preproc else X_hd, meth_name=paths.pca_name, meth_name4path=paths.pca_path, pca_preproc=False, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, skip_qa=True)
+        apply_meth(X_hd=X_hd_nopca[id_subs,:] if pca_preproc else X_hd[id_subs,:], meth_name=paths.pca_name, meth_name4path=paths.pca_path, pca_preproc=False, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, skip_qa=True)
         
         ##############################
         ##############################
         # Applying MDS
         ####################
-        apply_meth(X_hd=X_hd, meth_name=paths.mds_name, meth_name4path=paths.mds_sklearn_path if genomes else paths.mds_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_hd=None, dm_hd=None, skip_qa=True)
+        apply_meth(X_hd=X_hd[id_subs,:], meth_name=paths.mds_name, meth_name4path=paths.mds_sklearn_path if genomes else paths.mds_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_hd=None, dm_hd=None, skip_qa=True)
         
         ##############################
         ############################## 
         # Applying Laplacian eigenmaps (LE)
         ####################
-        apply_meth(X_hd=X_hd, meth_name=paths.LE_name, meth_name4path=paths.LE_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_LE=params.nn_LE, nn_hd=None, dm_hd=None, skip_qa=True)
+        apply_meth(X_hd=X_hd[id_subs,:], meth_name=paths.LE_name, meth_name4path=paths.LE_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_LE=params.nn_LE, nn_hd=None, dm_hd=None, skip_qa=True)
         
         ##############################
         ############################## 
         # Applying t-SNE
         ####################
-        apply_meth(X_hd=X_hd, meth_name=paths.tsne_name, meth_name4path=paths.tsne_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, perp_tsne=params.perp_tsne, nn_hd=None, dm_hd=None, skip_qa=True)
+        apply_meth(X_hd=X_hd[id_subs,:], meth_name=paths.tsne_name, meth_name4path=paths.tsne_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, perp_tsne=params.perp_tsne, nn_hd=None, dm_hd=None, skip_qa=True)
         
         ##############################
         ############################## 
         # Applying UMAP
         ####################
-        apply_meth(X_hd=X_hd, meth_name=paths.umap_name, meth_name4path=paths.umap_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_umap=params.nn_umap, nn_hd=None, dm_hd=None, skip_qa=True)
+        apply_meth(X_hd=X_hd[id_subs,:], meth_name=paths.umap_name, meth_name4path=paths.umap_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_umap=params.nn_umap, nn_hd=None, dm_hd=None, skip_qa=True)
         
         ##############################
         ############################## 
         # Applying PHATE
         ####################
-        apply_meth(X_hd=X_hd, meth_name=paths.phate_name, meth_name4path=paths.phate_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_phate=params.nn_phate, nn_hd=None, dm_hd=None, skip_qa=True)
+        apply_meth(X_hd=X_hd[id_subs,:], meth_name=paths.phate_name, meth_name4path=paths.phate_path, pca_preproc=pca_preproc, compute_dist_HD=None, compute_dist_LD_qa=None, seed=seed, res_path_emb=res_path_emb_subs_p, res_path_qa=None, dim_LDS=dim_LDS, nn_phate=params.nn_phate, nn_hd=None, dm_hd=None, skip_qa=True)
 
 def display_timings(L_meth_timings, data_name):
     """
