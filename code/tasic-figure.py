@@ -49,7 +49,7 @@ if plot_res_hps:
     plot_fcts.create_2x3_figures_hps(data_name=paths.tasic_name, emb_path=paths.tasic_emb, fig_path=paths.tasic_fig, arr_colors=colors, f_format=params.f_format, X_PCs=X_PCs, D_viz_emb=D_viz_emb)
 
 if plot_res_subs:
-    plot_fcts.create_2x3_figures_subs(data_name=paths.tasic_name, emb_path=paths.tasic_emb, fig_path=paths.tasic_fig, arr_colors=colors, f_format=params.f_format, D_viz_emb=D_viz_emb)
+    plot_fcts.create_2x3_figures_subs(data_name=paths.tasic_name, emb_path=paths.tasic_emb, fig_path=paths.tasic_fig, arr_colors=colors, n_samples=X_PCs.shape[0], f_format=params.f_format, D_viz_emb=D_viz_emb)
 
 print('*********************')
 print('***** Done! :-) *****')
