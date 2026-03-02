@@ -20,7 +20,7 @@ module_name = "kanton-figure.py"
 plot_res_hps = True
 
 # Set to True to create figures associated with subsamplings of this data set.
-plot_res_subs = True
+plot_res_subs = False
 
 ##############################
 ##############################
@@ -75,6 +75,7 @@ for k in D_samp_by_time:
 plot_fcts.create_2x3_figure(data_name=paths.kanton_name, emb_path=paths.kanton_emb, fig_path=paths.kanton_fig, arr_colors=labels, f_format=params.f_format, X_PCs=X_PCs, D_viz_emb={'D_samp_by_time':D_samp_by_time_arr})
 
 if plot_res_hps:
+    plot_qa_hp.plot_hps_qa_emb(data_name=paths.kanton_name, res_path_qa=paths.kanton_qa, genomes=False, fig_path=paths.kanton_fig, arr_colors=labels, emb_path=paths.kanton_emb)
     plot_qa_hp.plot_sev_hps(data_name=paths.kanton_name, res_path_qa=paths.kanton_qa, genomes=False, fig_path=paths.kanton_fig)
     plot_fcts.create_2x3_figures_hps(data_name=paths.kanton_name, emb_path=paths.kanton_emb, fig_path=paths.kanton_fig, arr_colors=labels, f_format=params.f_format, X_PCs=X_PCs, D_viz_emb={'D_samp_by_time':D_samp_by_time_arr})
 

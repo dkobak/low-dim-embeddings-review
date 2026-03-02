@@ -64,6 +64,7 @@ D_viz_emb['D_superpop'] = D_superpop_arr
 plot_fcts.create_2x3_figure(data_name=paths.genomes_name, emb_path=paths.genomes_emb, fig_path=paths.genomes_fig, arr_colors=labels, f_format=params.f_format, D_viz_emb=D_viz_emb)
 
 if plot_res_hps:
+    plot_qa_hp.plot_hps_qa_emb(data_name=paths.genomes_name, res_path_qa=paths.genomes_qa, genomes=True, fig_path=paths.genomes_fig, arr_colors=labels, emb_path=paths.genomes_emb)
     plot_qa_hp.plot_sev_hps(data_name=paths.genomes_name, res_path_qa=paths.genomes_qa, genomes=True, fig_path=paths.genomes_fig)
     plot_fcts.create_2x3_figures_hps(data_name=paths.genomes_name, emb_path=paths.genomes_emb, fig_path=paths.genomes_fig, arr_colors=labels, f_format=params.f_format, D_viz_emb=D_viz_emb)
 
