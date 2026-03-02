@@ -103,7 +103,7 @@ def rgb_to_hex(arr_rgb_color):
     rgb_color = (arr_rgb_color[0], arr_rgb_color[1], arr_rgb_color[2])
     return '#{:02x}{:02x}{:02x}'.format(*rgb_color)
 
-def viz_2d_emb(X, vcol, tit='', fname=None, f_format=None, ax_def=None, flipx=False, flipy=False, genomes=False, show=False, pca_tasic=False, tsne_tasic=False, umap_tasic=False, LE_tasic=False, pca_genomes=False, umap_genomes=False, LE_genomes=False, LE_kanton=False, phate_kanton=False, D_viz_emb=None):
+def viz_2d_emb(X, vcol, tit='', fname=None, f_format=None, ax_def=None, flipx=False, flipy=False, genomes=False, show=False, pca_tasic=False, tsne_tasic=False, umap_tasic=False, LE_tasic=False, pca_genomes=False, umap_genomes=False, LE_genomes=False, LE_kanton=False, phate_kanton=False, D_viz_emb=None, ylab=None, loc_center=False):
     """
     Plot a 2-D embedding of a data set.
     In:
@@ -126,6 +126,8 @@ def viz_2d_emb(X, vcol, tit='', fname=None, f_format=None, ax_def=None, flipx=Fa
     - LE_kanton: boolean. Set to True if LE embedding of Kanton et al data is displayed. 
     - phate_kanton: boolean. Set to True if PHATE embedding of Kanton et al data is displayed. 
     - D_viz_emb: dictionary with entries enabling to annotate the figure, depending on the embedding which is currently displayed. 
+    - ylab: y-axis label. Only displayed if not None. 
+    - loc_center: boolean. Title is centered is True, and left-aligned otherwise. 
     Out:
     Same as save_show_fig.
     """  
@@ -193,7 +195,9 @@ def viz_2d_emb(X, vcol, tit='', fname=None, f_format=None, ax_def=None, flipx=Fa
     ax.set_xticklabels([], minor=False)
     ax.set_yticklabels([], minor=False)
     
-    ax.set_title(tit, color="black", fontweight="bold", loc='left')
+    ax.set_title(tit, color="black", fontweight="bold", loc='center' if loc_center else 'left')
+    if ylab is not None:
+        ax.set_ylabel(ylab, color="black")#, fontweight="bold", loc='left')
     
     # Making the axes invisible
     for side in ['bottom', 'top', 'left', 'right']:
