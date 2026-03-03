@@ -240,7 +240,7 @@ def plot_hps_qa_emb(data_name, res_path_qa, genomes, fig_path, arr_colors, emb_p
     
     if data_name == paths.tasic_name:
         labels_pos = {
-            "pca": (0, 1.025),
+            "pca": (0, 0.99),
             "mds": (0.08, 0.95),
             "le": (0.1, 0.15),
             "tsne": (0.35, 0.6),
