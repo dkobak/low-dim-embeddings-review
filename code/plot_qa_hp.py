@@ -254,7 +254,7 @@ def plot_hps_qa_emb(data_name, res_path_qa, genomes, fig_path, arr_colors, emb_p
             "le": (0.1, 0.4),
             "tsne": (0.3, 0.65),
             "umap": (0.18, 0.5),
-            "phate": (0.12, 0.525),
+            "phate": (0.01, 0.65), # (0.12, 0.525),
         }
     elif data_name == paths.genomes_name:
         labels_pos = {
@@ -275,9 +275,12 @@ def plot_hps_qa_emb(data_name, res_path_qa, genomes, fig_path, arr_colors, emb_p
             "phate": (0.2, 0.28),
         }
     
-    L_show_nnp = [3,500]
+    L_show_nnp_le = [10,500]
+    L_show_nnp_tsne = [10,500]
+    L_show_nnp_umap = [5,500]
+    L_show_nnp_phate = [5,500]
+    
     arr_nn_perp = np.asarray(a=params.L_nn_perp, dtype=np.int64)
-    L_idx_show_nnp = [np.argwhere(np.isclose(arr_nn_perp-v,0))[0][0] for v in L_show_nnp]
     
     for x, y in [(paths.knn_recall_path, paths.pearson_corr_path)]: # , (paths.auc_path, paths.sigma_d_path), (paths.auc_path, paths.pearson_corr_path)
         # Loading quality scores
@@ -299,28 +302,28 @@ def plot_hps_qa_emb(data_name, res_path_qa, genomes, fig_path, arr_colors, emb_p
         # LE: 
         L_meths.append('le')
         D_qa['le'] = dict()
-        D_qa['le'][x] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param), k=x)) for nnp in params.L_nn_perp if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param), k=x))], dtype=np.float64)
-        D_qa['le'][y] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param), k=y)) for nnp in params.L_nn_perp if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param), k=y))], dtype=np.float64)
+        D_qa['le'][x] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param), k=x)) for nnp in params.L_nn_perp], dtype=np.float64) #  if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param), k=x))
+        D_qa['le'][y] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param), k=y)) for nnp in params.L_nn_perp], dtype=np.float64) #  if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param), k=y))
         
         # t-SNE: 
         L_meths.append('tsne')
         D_qa['tsne'] = dict()
-        D_qa['tsne'][x] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-p{p}'.format(p=int(round(nnp)), v=paths.tsne_path_no_param), k=x)) for nnp in params.L_nn_perp if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-p{p}'.format(p=int(round(nnp)), v=paths.tsne_path_no_param), k=x))], dtype=np.float64)
-        D_qa['tsne'][y] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-p{p}'.format(p=int(round(nnp)), v=paths.tsne_path_no_param), k=y)) for nnp in params.L_nn_perp if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-p{p}'.format(p=int(round(nnp)), v=paths.tsne_path_no_param), k=y))], dtype=np.float64)
+        D_qa['tsne'][x] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-p{p}'.format(p=int(round(nnp)), v=paths.tsne_path_no_param), k=x)) for nnp in params.L_nn_perp], dtype=np.float64) #  if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-p{p}'.format(p=int(round(nnp)), v=paths.tsne_path_no_param), k=x))
+        D_qa['tsne'][y] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-p{p}'.format(p=int(round(nnp)), v=paths.tsne_path_no_param), k=y)) for nnp in params.L_nn_perp], dtype=np.float64) #  if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-p{p}'.format(p=int(round(nnp)), v=paths.tsne_path_no_param), k=y))
         
         # UMAP: 
         L_meths.append('umap')
         D_qa['umap'] = dict()
-        D_qa['umap'][x] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param), k=x)) for nnp in params.L_nn_perp if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param), k=x))], dtype=np.float64)
-        D_qa['umap'][y] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param), k=y)) for nnp in params.L_nn_perp if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param), k=y))], dtype=np.float64)
+        D_qa['umap'][x] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param), k=x)) for nnp in params.L_nn_perp], dtype=np.float64) #  if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param), k=x))
+        D_qa['umap'][y] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param), k=y)) for nnp in params.L_nn_perp], dtype=np.float64) #  if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param), k=y))
         
         # PHATE: 
         L_meths.append('phate')
         D_qa['phate'] = dict()
-        D_qa['phate'][x] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param), k=x)) for nnp in params.L_nn_perp if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param), k=x))], dtype=np.float64)
-        D_qa['phate'][y] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param), k=y)) for nnp in params.L_nn_perp if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param), k=y))], dtype=np.float64)
+        D_qa['phate'][x] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param), k=x)) for nnp in params.L_nn_perp], dtype=np.float64) #  if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param), k=x))
+        D_qa['phate'][y] = np.asarray([np.load('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param), k=y)) for nnp in params.L_nn_perp], dtype=np.float64) #  if os.path.exists('{rp}hps/{npath}-{k}.npy'.format(rp=res_path_qa, npath='{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param), k=y))
         
-        fig = plt.figure(figsize=(7, 3.5))
+        fig = plt.figure(figsize=(7, 5.5))# plt.figure(figsize=(7, 3.5))
         gs = GridSpec(nrows=4, ncols=4, wspace=0.0, figure=fig)
         
         ax = plt.subplot(gs[0:2,1:3])
@@ -338,6 +341,20 @@ def plot_hps_qa_emb(data_name, res_path_qa, genomes, fig_path, arr_colors, emb_p
             )
             
             if (algo != 'pca') and (algo != 'mds'):
+                
+                if algo == 'le':
+                    L_show_nnp = L_show_nnp_le
+                elif algo == 'tsne':
+                    L_show_nnp = L_show_nnp_tsne
+                elif algo == 'umap':
+                    L_show_nnp = L_show_nnp_umap
+                elif algo == 'phate':
+                    L_show_nnp = L_show_nnp_phate
+                else: 
+                    L_show_nnp = []
+                
+                L_idx_show_nnp = [np.argwhere(np.isclose(arr_nn_perp-v,0))[0][0] for v in L_show_nnp]
+                
                 ax.scatter(
                     D_qa[algo][x][L_idx_show_nnp],
                     D_qa[algo][y][L_idx_show_nnp],
@@ -406,19 +423,23 @@ def plot_hps_qa_emb(data_name, res_path_qa, genomes, fig_path, arr_colors, emb_p
         
         res_path_emb_hps = "{v}hps/".format(v=emb_path)
         
-        for i_nnp, nnp in enumerate(L_show_nnp):
+        for i_nnp in range(2):
             
-            cur_LE_name = 'Lapl. Eig. ({n} neighbors)'.format(n=nnp, v=paths.LE_name_no_param)
-            cur_LE_path = '{v}-n{n}'.format(n=nnp, v=paths.LE_path_no_param)
+            nnp_le = L_show_nnp_le[i_nnp]
+            cur_LE_name = 'Lapl. Eig. ({n} neighbors)'.format(n=nnp_le, v=paths.LE_name_no_param)
+            cur_LE_path = '{v}-n{n}'.format(n=nnp_le, v=paths.LE_path_no_param)
             
-            cur_tsne_name = r't-SNE (perplexity: {p})'.format(p=nnp)#, v=paths.tsne_name_no_param)
-            cur_tsne_path = '{v}-p{p}'.format(v=paths.tsne_path_no_param, p=int(round(nnp)))
+            nnp_tsne = L_show_nnp_tsne[i_nnp]
+            cur_tsne_name = r't-SNE (perplexity: {p})'.format(p=nnp_tsne)#, v=paths.tsne_name_no_param)
+            cur_tsne_path = '{v}-p{p}'.format(v=paths.tsne_path_no_param, p=int(round(nnp_tsne)))
             
-            cur_umap_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.umap_name_no_param)
-            cur_umap_path = '{v}-n{n}'.format(n=nnp, v=paths.umap_path_no_param)
+            nnp_umap = L_show_nnp_umap[i_nnp]
+            cur_umap_name = '{v} ({n} neighbors)'.format(n=nnp_umap, v=paths.umap_name_no_param)
+            cur_umap_path = '{v}-n{n}'.format(n=nnp_umap, v=paths.umap_path_no_param)
             
-            cur_phate_name = '{v} ({n} neighbors)'.format(n=nnp, v=paths.phate_name_no_param)
-            cur_phate_path = '{v}-n{n}'.format(n=nnp, v=paths.phate_path_no_param)
+            nnp_phate = L_show_nnp_phate[i_nnp]
+            cur_phate_name = '{v} ({n} neighbors)'.format(n=nnp_phate, v=paths.phate_name_no_param)
+            cur_phate_path = '{v}-n{n}'.format(n=nnp_phate, v=paths.phate_path_no_param)
             
             ##############################
             ############################## 
@@ -440,7 +461,7 @@ def plot_hps_qa_emb(data_name, res_path_qa, genomes, fig_path, arr_colors, emb_p
                 flipx = False
                 flipy = False
             #tit=paths.LE_name_no_param
-            plot_fcts.viz_2d_emb(X=X_LE, vcol=arr_colors, tit=cur_LE_name, ax_def=gs[2+i_nnp,0], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, LE_tasic=False, LE_genomes=False, LE_kanton=False, D_viz_emb=None, loc_center=True, ylab=None) #ylab="# neighbors / perplexity: {n}".format(n=nnp)
+            plot_fcts.viz_2d_emb(X=X_LE, vcol=arr_colors, tit=cur_LE_name, ax_def=gs[2+i_nnp,0], flipx=flipx, flipy=flipy, genomes=data_name == paths.genomes_name, LE_tasic=False, LE_genomes=False, LE_kanton=False, D_viz_emb=None, loc_center=True, ylab=None) #ylab="# neighbors / perplexity: {n}".format(n=nnp_le)
             
             ##############################
             ############################## 
